@@ -25,6 +25,7 @@ Invoke-RestMethod -Uri $api/api | ConvertTo-Json
 <details>
   <summary>&#x261d; &#xfe0f; Hint </summary>
   <p>You can colorize the output by using <a href="https://stedolan.github.io/jq/download">jq</a>, you can then view the colorized output by </p>
+
 ```powershell
   Invoke-RestMethod -Uri $api/api | ConvertTo-Json | jq -C
 ```
