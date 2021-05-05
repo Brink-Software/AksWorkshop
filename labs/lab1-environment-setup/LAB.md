@@ -11,4 +11,4 @@
 az aks get-credentails -n <clusterName> -g <clusterResourcegroupName>
 ```
 
-[next :arrow_forward:](../lab2/LAB.md)
+[next :arrow_forward:](../lab2-exploring-k8s-api/LAB.md)

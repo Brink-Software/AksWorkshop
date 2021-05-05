@@ -56,4 +56,4 @@ Invoke-RestMethod -Uri $api/api/v1/namespaces/kube-system/pods | ConvertTo-Json
 
 ## 4. Explore the apiserver using C# and .Net Core
 
-[:arrow_backward: previous](../lab1/LAB.md)  [next :arrow_forward:](../lab3/LAB.md)
+[:arrow_backward: previous](../lab1-environment-setup/LAB.md)  [next :arrow_forward:](../lab3-workloads/LAB.md)
