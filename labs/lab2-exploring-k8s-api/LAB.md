@@ -6,7 +6,7 @@
 Run the following command to start the proxy. The proxy will handle exposing and authentication to the kubernetes apiserver.
 
 ```powershell
-kubectl proxy -port 8080
+kubectl proxy --port 8080
 ```
 
 Open another powershell terminal to start exploring the api, and run the following command to set the api url.
