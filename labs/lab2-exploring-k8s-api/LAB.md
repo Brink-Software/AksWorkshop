@@ -3,7 +3,7 @@
 #### In this lab we will explore the kubernetes api using the proxy, kubectl, VS Code, the azure portal and C#
 
 ## 1. Explore the apiserver using the proxy
-Run the following command to start the proxy. The proxy will handle  exposing and authentiacting to the kubernetes apiserver.
+Run the following command to start the proxy. The proxy will handle exposing and authentication to the kubernetes apiserver.
 
 ```powershell
 kubectl proxy -port 8080
