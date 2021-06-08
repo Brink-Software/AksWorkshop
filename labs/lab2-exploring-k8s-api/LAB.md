@@ -51,10 +51,10 @@ Run the following command to query the pods in the kube-system namespace
 Invoke-RestMethod -Uri $api/api/v1/namespaces/kube-system/pods | ConvertTo-Json
 ```
 
-We can also create items using the api, to create a namespace add this following [file](../../exercises/lab1/namespace.json) to you current directory `exercises/lab1/namespace.json`. You can then create the namespace by running the following command:
+We can also create items using the api, to create a namespace add this following [file](../../exercises/lab2/namespace.json) to you current directory `exercises/lab2/namespace.json`. You can then create the namespace by running the following command:
 
 ```powershell
-Invoke-RestMethod -Uri $api/api/v1/namespaces -Method POST  -ContentType application/json -InFile ./exercises/lab1/namespace.json   | ConvertTo-Json
+Invoke-RestMethod -Uri $api/api/v1/namespaces -Method POST  -ContentType application/json -InFile ./exercises/lab2/namespace.json   | ConvertTo-Json
 ```
 
 We can also retreive the created namespace by running the follwing command:
@@ -66,7 +66,7 @@ Invoke-RestMethod -Uri $api/api/v1/namespaces/dev | ConvertTo-Json
 We can also edit the namespace using the proxy, edit the json and add an extra label `author` with your name as the value, and run the following command:
 
 ```powershell
-Invoke-RestMethod -Uri $api/api/v1/namespaces/dev -Method PUT  -ContentType application/json -InFile ./exercises/lab1/namespace.json   | ConvertTo-Json
+Invoke-RestMethod -Uri $api/api/v1/namespaces/dev -Method PUT  -ContentType application/json -InFile ./exercises/lab2/namespace.json   | ConvertTo-Json
 ```
 
 Finally lets delete the namespace by running the following command:
@@ -124,7 +124,7 @@ kubectl api-resources
 We can also create a namespace by running the following command:
 
 ```powershell
-kubectl create -f ./exercises/lab1/namespace.json
+kubectl create -f ./exercises/lab2/namespace.json
 ```  
 
 You can then view the created namespace by running:
@@ -150,7 +150,7 @@ kubectl delete ns dev
 Instead of using the create and edit commands you can also use the apply command, this will allow you to manage and version your resource definitions in source control.
 
 ```powershell
-kubectl apply -f ./exercises/lab1/namespace.json
+kubectl apply -f ./exercises/lab2/namespace.json
 ```
 
 If you run the command again you should see the follwing output:
