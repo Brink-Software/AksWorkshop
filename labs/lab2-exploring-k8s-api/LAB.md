@@ -408,7 +408,7 @@ kubectl get namespaces -o json
 <details>
   <summary style="font-size:24px; font-weight:bold;">&#127873; Bonus</summary>
 
-Run the following commands to download and view the kubernetes api details using OpenApi.
+Run the following commands to download and view the kubernetes api details using OpenApi. Note: if you are running Docker for Windows make sure you are using Linux containers.
 
 ```powershell
 kubectl proxy --port 8080
