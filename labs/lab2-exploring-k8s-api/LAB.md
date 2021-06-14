@@ -153,7 +153,7 @@ Instead of using the create and edit commands you can also use the apply command
 kubectl apply -f ./exercises/lab2/namespace.json
 ```
 
-If you run the command again you should see the follwing output:
+If you run the command again you should see the following output:
 
 ```text
 namespace/dev unchanged
