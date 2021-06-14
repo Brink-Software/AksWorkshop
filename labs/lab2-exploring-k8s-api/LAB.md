@@ -198,6 +198,7 @@ Open the `Program.cs` file and replace the code with following:
 ```C#
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using k8s;
 using k8s.Models;
