@@ -355,7 +355,7 @@ Edit the main function so it is calling the `WatchNamespaces` method, and run th
 
 ## :exclamation: Kubernetes api Security
 
-In [lab1](./lab1-environment-setup/LAB.md) when you ran the `az aks get-credentails` command you added information locally about how to access the cluster. This information is being used when accessing the cluster locally. You can view this information by running the following command:
+In [lab1](./lab1-environment-setup/LAB.md) when you ran the `az aks get-credentials` command you added information locally about how to access the cluster. This information is being used when accessing the cluster locally. You can view this information by running the following command:
 
 ```powershell
 kubectl config view
