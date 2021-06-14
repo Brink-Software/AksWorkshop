@@ -386,7 +386,7 @@ users:
     token: REDACTED
 ```
 
-This config file contains all the information necessary to access the cluster and perform most operations. When using the .net client we are  authenticationg using this file, you can see that on line 13 of `Progam.cs`
+This config file contains all the information necessary to access the cluster and perform most operations. When using the .net client we are  authenticationg using this file, you can see that on line 13 of the `Program.cs` file.
 
 ```C#
 var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
