@@ -24,13 +24,13 @@ Invoke-RestMethod -Uri $api/api | ConvertTo-Json
 <p>
 <details>
   <summary>&#x261d; &#xfe0f; Hint </summary>
-<div style="padding: 15px; background-color: #eee;">  
+<ul>  
   <p>You can colorize the output by using <a href="https://stedolan.github.io/jq/download">jq</a>, you can then view the colorized output by </p>
 
 ```powershell
   Invoke-RestMethod -Uri $api/api | ConvertTo-Json | jq -C
 ```
-</div>
+</ul>
 </details>
 </p>
 <!-- markdownlint-enable MD033 -->
@@ -97,7 +97,7 @@ kubectl get namespaces
 <p>
 <details>
   <summary>&#x261d; &#xfe0f; Hint </summary>
-<div style="padding: 15px; background-color: #eee;">
+<ul>
 <h3>kubeclt Output:</h3>  
   <p>The output will be in human readable plain-text format but you can change the format to json by running the following command:</p>
 
@@ -119,7 +119,7 @@ kubectl get ns -o json
 ```powershell
 kubectl api-resources
 ```  
-</div>  
+</ul>  
 </details>
 </p>
 <!-- markdownlint-enable MD033 -->
@@ -411,10 +411,13 @@ var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
 <details>
   <summary style="font-size:24px; font-weight:bold;">&#10067;Quiz</summary></h3>
 
+<ul>
+
 ```powershell
 kubectl get namespaces -o json
 ```
 
+</ul>
 </details>
 
 <!-- markdownlint-enable MD033 -->
@@ -423,6 +426,7 @@ kubectl get namespaces -o json
 <details>
   <summary style="font-size:24px; font-weight:bold;">&#127873; Bonus</summary>
 
+<ul>
 Run the following commands to download and view the kubernetes api details using OpenApi. Note: if you are running Docker for Windows make sure you are using Linux containers.
 
 ```powershell
@@ -436,7 +440,7 @@ docker run --rm -p 8081:8080 -e SWAGGER_JSON=/foo/k8s.json -v $pwd/openapi:/foo 
 You should now be able to view to kubernetes api details by navigating to [http://localhost:8081](http://localhost:8081)
 
 You can also use the OpenApi details to import a collection into [Postman](https://learning.postman.com/docs/integrations/available-integrations/working-with-openAPI/), or any other OpenApi client.
-
+</ul>
 </details>
 <!-- markdownlint-enable MD033 -->
 
