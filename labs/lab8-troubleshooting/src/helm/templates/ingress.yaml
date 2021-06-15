@@ -4,8 +4,6 @@ metadata:
   name: {{ include "failure.name" . }}-ingress
   annotations:
     kubernetes.io/ingress.class: azure/application-gateway
-#    appgw.ingress.kubernetes.io/appgw-ssl-certificate: ibis.nl
-#    appgw.ingress.kubernetes.io/ssl-redirect: "true"
     appgw.ingress.kubernetes.io/request-timeout: "120"
 
 spec:

@@ -2,7 +2,7 @@
 
 Examine the Helm chart located in the folder [exercises/lab8](../../exercises/lab8). Deploy the chart to the cluster using any method you like and watch it fail. 
 
-If you have troubles deploying the chart use the hint below.
+If you have troubles deploying the chart take a look at the hint below.
 
 <!-- markdownlint-disable MD033 -->
 <p>
@@ -32,11 +32,28 @@ Your job for this lab is to identitify the problems, solve them and get the depl
 
 <!-- markdownlint-disable MD033 -->
 <details>
-  <summary>&#127873; Bonus</summary>
+  <summary>&#127873; Bonus 1</summary>
 
 - How many problems did you solve?
 - What are the symptoms of the problems?
 - How did you solve them?
+
+</details>
+<!-- markdownlint-enable MD033 -->
+
+<!-- markdownlint-disable MD033 -->
+<details>
+  <summary>&#127873; Bonus 2</summary>
+
+In the ingress definition, change line 16 to 
+
+```
+serviceName: {{ include "failure.name" . }}-service
+```
+
+Then deploy the chart and observe that the deployment is not working.
+
+- How can you find out what the problem is?
 
 </details>
 <!-- markdownlint-enable MD033 -->

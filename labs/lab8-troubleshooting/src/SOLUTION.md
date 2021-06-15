@@ -56,7 +56,7 @@ Fix the type in the repository definition: repository: mcr.mi**cr**osoft.com/dot
 
 ### Remarks
 
-ImagePullBackOff or ImageErr errors can happen if there are problems accessing the container image registry. This include access and permissione issues and wrong names or labels.
+ImagePullBackOff or ImageErr errors can happen if there are problems accessing the container image registry. This include access and permission issues and wrong names or labels.
 
 ## The pods won't start
 The pods could not be started because there where problems with the workload. The restart counter of the pod is increasing as well.
