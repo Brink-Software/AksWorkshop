@@ -181,7 +181,19 @@ Then navigate to the namespaces tab uncer `Kubernetes resources`, and create, up
 
 While you are in the portal take the time to explore the other tabs beneath the kubernetes resources section. We will be discussing almost all of these resources in this workshop.
 
-## 4. Explore the apiserver using C# and .Net Core
+## 4. Explore the apiserver using vs code
+
+We can also use [this](https://marketplace.visualstudio.com/items?itemName=ms-kubernetes-tools.vscode-kubernetes-tools) vs code extension to explore the kubernetes resources. One you have installed the extension you can the navigate to kubernetes tab and explore the resources there.
+
+![Kubernetes in VS Code](./images/k8s_in_vs_code.png)
+
+![Kubernetes in VS Code](./images/k8s_in_vs_code_2.png)
+
+
+
+You can read more about vs code and kubernetes [here](https://code.visualstudio.com/docs/azure/kubernetes).
+
+## 5. Explore the apiserver using C# and .Net Core
 Kubernetes also has [client libraries](https://kubernetes.io/docs/reference/using-api/client-libraries/) that allow you to manages your cluster from code. In this exercise we will use the [.Net library](https://github.com/kubernetes-client/csharp) to explore the api.
 
 Create a new C# console application and add the `KubernetesClient` nuget package.
@@ -300,7 +312,7 @@ namespace ExploreKubernetesApi
 
 Examine and run the code to see the generated output.
 
-## 5: Watching kubernetes resources
+## 6: Watching kubernetes resources
 
 Apart from being able to run the usual CRUD operations, we can also ask the kubernetes client to notify us when a resource or list of resources has changed. If you run the following command:
 
