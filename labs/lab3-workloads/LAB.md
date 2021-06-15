@@ -104,7 +104,9 @@ kubectl describe pod/samplewebapp
 <p>
 <details>
   <summary>&#x261d; &#xfe0f; Hint </summary>
+<div style="padding: 15px; background-color: #eee;">  
   <p>The describe command provides detailed information about the resource and any recent events that are associated with the resource. You can read more about this <a href="https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/#using-kubectl-describe-pod-to-fetch-details-about-pods">here</a></p>
+</div>
 </details>
 </p>
 <!-- markdownlint-enable MD033 -->

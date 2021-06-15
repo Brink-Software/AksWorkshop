@@ -24,11 +24,13 @@ Invoke-RestMethod -Uri $api/api | ConvertTo-Json
 <p>
 <details>
   <summary>&#x261d; &#xfe0f; Hint </summary>
+<div style="padding: 15px; background-color: #eee;">  
   <p>You can colorize the output by using <a href="https://stedolan.github.io/jq/download">jq</a>, you can then view the colorized output by </p>
 
 ```powershell
   Invoke-RestMethod -Uri $api/api | ConvertTo-Json | jq -C
 ```
+</div>
 </details>
 </p>
 <!-- markdownlint-enable MD033 -->
@@ -95,7 +97,8 @@ kubectl get namespaces
 <p>
 <details>
   <summary>&#x261d; &#xfe0f; Hint </summary>
-  <h3>kubeclt Output:</h3>  
+<div style="padding: 15px; background-color: #eee;">
+<h3>kubeclt Output:</h3>  
   <p>The output will be in human readable plain-text format but you can change the format to json by running the following command:</p>
 
 ```powershell
@@ -116,7 +119,7 @@ kubectl get ns -o json
 ```powershell
 kubectl api-resources
 ```  
-
+</div>  
 </details>
 </p>
 <!-- markdownlint-enable MD033 -->
