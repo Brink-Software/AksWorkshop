@@ -7,8 +7,7 @@ host: "failure.nl"
 replicaCount: 2
 
 image:
-#  repository: mcr.mircosoft.com/dotnet/samples
-  repository: mcr.microsoft.com/dotnet/samples
+  repository: mcr.mircosoft.com/dotnet/samples
   tag: aspnetapp
   pullPolicy: IfNotPresent
 
@@ -18,12 +17,12 @@ service:
 resources:
   limits:
     cpu: 1000m
-#    memory: 65536Mi
+    memory: 65536Mi
   requests:
     cpu: 200m
-#    memory: 65536Mi
+    memory: 65536Mi
 
-#nodeSelector:
-#  kubernetes.io/os: windows
+nodeSelector:
+  kubernetes.io/os: windows
 
 affinity: {}
