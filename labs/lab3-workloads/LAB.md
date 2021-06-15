@@ -11,7 +11,7 @@ kubectl create namespace lab3
 kubectl config set-context --current --namespace=lab3
 ```
 
-Now lets create a new dotnet 5 web application, you can follow along with the steps here or you can use visual studio and addding docker support.
+Now lets create a new .NET 5 web application, you can follow along with the steps here or you can use visual studio and add docker support.
 
 ```powershell
 mkdir lab3
@@ -104,7 +104,9 @@ kubectl describe pod/samplewebapp
 <p>
 <details>
   <summary>&#x261d; &#xfe0f; Hint </summary>
+<ul>  
   <p>The describe command provides detailed information about the resource and any recent events that are associated with the resource. You can read more about this <a href="https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application-introspection/#using-kubectl-describe-pod-to-fetch-details-about-pods">here</a></p>
+</ul>
 </details>
 </p>
 <!-- markdownlint-enable MD033 -->
@@ -146,7 +148,7 @@ We can now navigate to this IP address and see our now familiar web page.
 
 ## 2. Scaling up with ReplicaSets
 
-Lets simulate an application error that crashes the pod by delting it
+Lets simulate an application error that crashes the pod by deleting it.
 
 ```powershell
 kubectl delete po samplewebapp 
@@ -156,9 +158,9 @@ Our web application is now down and if we try to refresh the page we will get an
 
 This is where `ReplicaSets` can help, they give us two great benefits:
 
-1. We can have multiple instances (replicas) of the same pods running
+1. We can have multiple instances (replicas) of the same pods running.
 
-2. Reconciliation loops, kubernetes will be continuously checking the desired state (number of replicas) vs the observed/current state, and will take action to ensure the observed state matches the desired state. You can read more about this [here](https://kubernetes.io/docs/concepts/architecture/controller/)
+2. Reconciliation loops, kubernetes will be continuously checking the desired state (number of replicas) vs the observed/current state, and will take action to ensure the observed state matches the desired state. You can read more about this [here](https://kubernetes.io/docs/concepts/architecture/controller/).
 
 First lets delete the service, we will create another one soon.
 
@@ -166,7 +168,7 @@ First lets delete the service, we will create another one soon.
 kubectl delete service/samplewebapp
 ```
 
-Next create a file `samplewebapp.rs.yaml` and copy the content below into the file. Make sure to replace `<your-acr-name>` with `$ACR_NAME`
+Next create a file `samplewebapp.rs.yaml` and copy the content below into the file. Make sure to replace `<your-acr-name>` with the `$ACR_NAME` value.
 
 ```yaml
 apiVersion: apps/v1
@@ -205,7 +207,7 @@ kubectl expose replicaset/samplewebapp --port 80 --type LoadBalancer
 kubectl get service samplewebapp -w
 ```
 
-One we have an IP address we should be able navigate to our web application. We can the delete one of the pods but the web application will still be available. Not only is our application still available, but aother pod will be scheduled to take the old pods place ensuring that we have the desired amout of pods running.
+One we have an IP address we should be able navigate to our web application. We can the delete one of the pods but the web application will remain available. Not only is our application still available, but another pod will be scheduled to take the old pods place ensuring that we have the desired amount of pods running.
 
 We can even delete all pods and our application will only be briefly unavailable.
 
@@ -238,15 +240,160 @@ az acr build --registry $ACR_NAME --image samplewebapp:v2 .
 docker run --rm -it -p 8082:80 "$($ACR_NAME).azurecr.io/samplewebapp:v2"
 ```
 
-Next lets rename `samplewebapp.rs.yaml` file to `samplewebapp.deployment.yaml` and change the Kind property from `ReplicaSet` to `Deployment`.
+Navigate to http://localhost:8082 and check that the output is as espected.
 
+Next lets rename or copy `samplewebapp.rs.yaml` file to `samplewebapp.deployment.yaml` and change the Kind property from `ReplicaSet` to `Deployment`. 
 
+We can create the deployment resources and expose the pods.
 
-<!-- Lets finish up by deleting the `lab3` namespace and resetting the default namespace in our configuration file.
+```powershell
+kubectl apply -f ./samplewebapp.deployment.yaml --record
+kubectl expose deployment/samplewebapp --port 80 --type LoadBalancer
+kubectl get service samplewebapp -w
+```
+
+Our web application should now be available on the service external IP address.
+
+Now lets open a seperate terminal and run the following command to start watching any deployments we might have.
+
+```powershell
+kubectl get deployments -w -owide
+```
+Open another terminal and lets start watching the replicasets
+
+```powershell
+kubectl get replicasets -w -owide
+```
+
+Open a 3rd terminal and lets watch the pods
+
+```powershell
+kubectl get pods -w -owide
+```
+
+Lets now edit the file `samplewebapp.deployment.yaml` and change the image tag to `v2` and lets apply this file again.
+
+```powershell
+kubectl apply -f ./samplewebapp.deployment.yaml --record
+```
+
+If we refresh de web application we should see that the output has changed to our new web application.
+
+We can also inspect the output of our various watchers to see exactly what happened.
+
+Deployments:
+
+```text
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE   CONTAINERS     IMAGES                                 SELECTOR
+samplewebapp   2/2     2            2           10m   samplewebapp   arcbc5524.azurecr.io/samplewebapp:v1   app=samplewebapp
+samplewebapp   2/2     2            2           11m   samplewebapp   arcbc5524.azurecr.io/samplewebapp:v2   app=samplewebapp
+samplewebapp   2/2     2            2           11m   samplewebapp   arcbc5524.azurecr.io/samplewebapp:v2   app=samplewebapp
+samplewebapp   2/2     0            2           11m   samplewebapp   arcbc5524.azurecr.io/samplewebapp:v2   app=samplewebapp
+samplewebapp   2/2     1            2           11m   samplewebapp   arcbc5524.azurecr.io/samplewebapp:v2   app=samplewebapp
+samplewebapp   3/2     1            3           11m   samplewebapp   arcbc5524.azurecr.io/samplewebapp:v2   app=samplewebapp
+samplewebapp   2/2     1            2           11m   samplewebapp   arcbc5524.azurecr.io/samplewebapp:v2   app=samplewebapp
+samplewebapp   2/2     2            2           11m   samplewebapp   arcbc5524.azurecr.io/samplewebapp:v2   app=samplewebapp
+samplewebapp   3/2     2            3           11m   samplewebapp   arcbc5524.azurecr.io/samplewebapp:v2   app=samplewebapp
+samplewebapp   2/2     2            2           11m   samplewebapp   arcbc5524.azurecr.io/samplewebapp:v2   app=samplewebapp
+```
+
+ReplicaSets:
+
+```text
+NAME                      DESIRED   CURRENT   READY   AGE   CONTAINERS     IMAGES                                 SELECTOR
+samplewebapp-7595b5cb8b   2         2         2       10m   samplewebapp   arcbc5524.azurecr.io/samplewebapp:v1   app=samplewebapp,pod-template-hash=7595b5cb8b
+samplewebapp-7df95b4555   1         0         0       0s    samplewebapp   arcbc5524.azurecr.io/samplewebapp:v2   app=samplewebapp,pod-template-hash=7df95b4555
+samplewebapp-7df95b4555   1         0         0       0s    samplewebapp   arcbc5524.azurecr.io/samplewebapp:v2   app=samplewebapp,pod-template-hash=7df95b4555
+samplewebapp-7df95b4555   1         1         0       0s    samplewebapp   arcbc5524.azurecr.io/samplewebapp:v2   app=samplewebapp,pod-template-hash=7df95b4555
+samplewebapp-7df95b4555   1         1         1       3s    samplewebapp   arcbc5524.azurecr.io/samplewebapp:v2   app=samplewebapp,pod-template-hash=7df95b4555
+samplewebapp-7595b5cb8b   1         2         2       11m   samplewebapp   arcbc5524.azurecr.io/samplewebapp:v1   app=samplewebapp,pod-template-hash=7595b5cb8b
+samplewebapp-7df95b4555   2         1         1       3s    samplewebapp   arcbc5524.azurecr.io/samplewebapp:v2   app=samplewebapp,pod-template-hash=7df95b4555
+samplewebapp-7595b5cb8b   1         2         2       11m   samplewebapp   arcbc5524.azurecr.io/samplewebapp:v1   app=samplewebapp,pod-template-hash=7595b5cb8b
+samplewebapp-7df95b4555   2         1         1       3s    samplewebapp   arcbc5524.azurecr.io/samplewebapp:v2   app=samplewebapp,pod-template-hash=7df95b4555
+samplewebapp-7595b5cb8b   1         1         1       11m   samplewebapp   arcbc5524.azurecr.io/samplewebapp:v1   app=samplewebapp,pod-template-hash=7595b5cb8b
+```
+
+Pods
+
+```text
+NAME                            READY   STATUS    RESTARTS   AGE   IP            NODE                          NOMINATED NODE   READINESS GATES
+samplewebapp-7595b5cb8b-hdmpc   1/1     Running   0          10m   10.240.0.18   aks-lin-26726762-vmss000000   <none>           <none>
+samplewebapp-7595b5cb8b-w7g5s   1/1     Running   0          10m   10.240.0.30   aks-lin-26726762-vmss000000   <none>           <none>
+samplewebapp-7df95b4555-d9tft   0/1     Pending   0          0s    <none>        <none>                        <none>           <none>
+samplewebapp-7df95b4555-d9tft   0/1     Pending   0          0s    <none>        aks-lin-26726762-vmss000000   <none>           <none>
+samplewebapp-7df95b4555-d9tft   0/1     ContainerCreating   0          0s    <none>        aks-lin-26726762-vmss000000   <none>           <none>
+samplewebapp-7df95b4555-d9tft   1/1     Running             0          3s    10.240.0.15   aks-lin-26726762-vmss000000   <none>           <none>
+samplewebapp-7595b5cb8b-hdmpc   1/1     Terminating         0          11m   10.240.0.18   aks-lin-26726762-vmss000000   <none>           <none>
+samplewebapp-7df95b4555-vfjzm   0/1     Pending             0          0s    <none>        <none>                        <none>           <none>
+samplewebapp-7df95b4555-vfjzm   0/1     Pending             0          0s    <none>        aks-lin-26726762-vmss000000   <none>           <none>
+samplewebapp-7df95b4555-vfjzm   0/1     ContainerCreating   0          0s    <none>        aks-lin-26726762-vmss000000   <none>           <none>
+samplewebapp-7df95b4555-vfjzm   1/1     Running             0          1s    10.240.0.27   aks-lin-26726762-vmss000000   <none>           <none>
+samplewebapp-7595b5cb8b-hdmpc   0/1     Terminating         0          11m   10.240.0.18   aks-lin-26726762-vmss000000   <none>           <none>
+samplewebapp-7595b5cb8b-w7g5s   1/1     Terminating         0          11m   10.240.0.30   aks-lin-26726762-vmss000000   <none>           <none>
+samplewebapp-7595b5cb8b-w7g5s   0/1     Terminating         0          11m   10.240.0.30   aks-lin-26726762-vmss000000   <none>           <none>
+samplewebapp-7595b5cb8b-hdmpc   0/1     Terminating         0          11m   10.240.0.18   aks-lin-26726762-vmss000000   <none>           <none>
+samplewebapp-7595b5cb8b-hdmpc   0/1     Terminating         0          11m   10.240.0.18   aks-lin-26726762-vmss000000   <none>           <none>
+samplewebapp-7595b5cb8b-w7g5s   0/1     Terminating         0          11m   10.240.0.30   aks-lin-26726762-vmss000000   <none>           <none>
+samplewebapp-7595b5cb8b-w7g5s   0/1     Terminating         0          11m   10.240.0.30   aks-lin-26726762-vmss000000   <none>           <none>
+```
+
+From the logs you can see that the deployment ran by creating a new pod and the deleting one of the old pods, untill there where only new pods left. This is the default deployment strategy `RollingUpdate` you can also configure the deployment to remove all the old pods before creating new ones the `Recreate` strategy. You can read more about this [here](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy).
+
+Because we are using deployments we can now inspect the history of our deployment using the following command.
+
+```powershell
+kubectl rollout history deployment samplewebapp
+```
+
+We can also undo our last change and revert back to the initial deployment.
+
+```powershell
+kubectl rollout undo deployment samplewebapp --to-revision=1
+```
+
+If we refresh de web application we should see that the output has changed back. 
+
+## 4. Other Workloads
+
+So far in this lab we have discussed 3 types of workloads `Pods` and the higher-level workload `ReplicaSet` and `Deployments`. Below is a list of the other workloads. We wont dive into these workloads now but it is good to know about them.
+
+### DaemonSet
+From the [docs](https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/):
+> A DaemonSet ensures that all (or some) Nodes run a copy of a Pod. As nodes are added to the cluster, Pods are added to them. As nodes are removed from the cluster, those Pods are garbage collected. Deleting a DaemonSet will clean up the Pods it created.
+>
+> Some typical uses of a DaemonSet are:
+> 
+> - running a cluster storage daemon on every node
+> - running a logs collection daemon on every node
+> - running a node monitoring daemon on every node
+>
+>In a simple case, one DaemonSet, covering all nodes, would be used for each type of daemon. A more complex setup might use multiple DaemonSets for a single type of daemon, but with different flags and/or different memory and cpu requests for different hardware types.
+
+You can list all the running `DaemonSets` in the cluster by running the following command:
+```powershell
+kubectl get daemonsets --all-namespaces
+```
+
+### Jobs
+
+From the [docs](https://kubernetes.io/docs/concepts/workloads/controllers/job/): 
+> A Job creates one or more Pods and will continue to retry execution of the Pods until a specified number of them successfully terminate. As pods successfully complete, the Job tracks the successful completions. When a specified number of successful completions is reached, the task (ie, Job) is complete. Deleting a Job will clean up the Pods it created. Suspending a Job will delete its active Pods until the Job is resumed again.
+>
+> A simple case is to create one Job object in order to reliably run one Pod to completion. The Job object will start a new Pod if the first Pod fails or is deleted (for example due to a node hardware failure or a node reboot).
+>
+> You can also use a Job to run multiple Pods in parallel.
+
+### CronJob
+From the [docs](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/):
+> A CronJob creates Jobs on a repeating schedule.
+>
+> CronJobs are useful for creating periodic and recurring tasks, like running backups or sending emails. CronJobs can also schedule individual tasks for a specific time, such as scheduling a Job for when your cluster is likely to be idle.
+
+Lets finish up by deleting the `lab3` namespace and resetting the default namespace in our configuration file.
 
 ```powershell
 kubectl delete namespace lab3 
 kubectl config set-context --current --namespace=default
-``` -->
+```
 
 [:arrow_backward: previous](../lab2-exploring-k8s-api/LAB.md)  [next :arrow_forward:](../lab4-configuration/LAB.md)

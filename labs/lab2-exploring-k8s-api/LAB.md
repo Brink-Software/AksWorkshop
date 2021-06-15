@@ -24,11 +24,13 @@ Invoke-RestMethod -Uri $api/api | ConvertTo-Json
 <p>
 <details>
   <summary>&#x261d; &#xfe0f; Hint </summary>
+<ul>  
   <p>You can colorize the output by using <a href="https://stedolan.github.io/jq/download">jq</a>, you can then view the colorized output by </p>
 
 ```powershell
   Invoke-RestMethod -Uri $api/api | ConvertTo-Json | jq -C
 ```
+</ul>
 </details>
 </p>
 <!-- markdownlint-enable MD033 -->
@@ -95,7 +97,8 @@ kubectl get namespaces
 <p>
 <details>
   <summary>&#x261d; &#xfe0f; Hint </summary>
-  <h3>kubeclt Output:</h3>  
+<ul>
+<h3>kubeclt Output:</h3>  
   <p>The output will be in human readable plain-text format but you can change the format to json by running the following command:</p>
 
 ```powershell
@@ -116,7 +119,7 @@ kubectl get ns -o json
 ```powershell
 kubectl api-resources
 ```  
-
+</ul>  
 </details>
 </p>
 <!-- markdownlint-enable MD033 -->
@@ -181,7 +184,19 @@ Then navigate to the namespaces tab uncer `Kubernetes resources`, and create, up
 
 While you are in the portal take the time to explore the other tabs beneath the kubernetes resources section. We will be discussing almost all of these resources in this workshop.
 
-## 4. Explore the apiserver using C# and .Net Core
+## 4. Explore the apiserver using vs code
+
+We can also use [this](https://marketplace.visualstudio.com/items?itemName=ms-kubernetes-tools.vscode-kubernetes-tools) vs code extension to explore the kubernetes resources. One you have installed the extension you can the navigate to kubernetes tab and explore the resources there.
+
+![Kubernetes in VS Code](./images/k8s_in_vs_code.png)
+
+![Kubernetes in VS Code](./images/k8s_in_vs_code_2.png)
+
+
+
+You can read more about vs code and kubernetes [here](https://code.visualstudio.com/docs/azure/kubernetes).
+
+## 5. Explore the apiserver using C# and .Net Core
 Kubernetes also has [client libraries](https://kubernetes.io/docs/reference/using-api/client-libraries/) that allow you to manages your cluster from code. In this exercise we will use the [.Net library](https://github.com/kubernetes-client/csharp) to explore the api.
 
 Create a new C# console application and add the `KubernetesClient` nuget package.
@@ -300,7 +315,7 @@ namespace ExploreKubernetesApi
 
 Examine and run the code to see the generated output.
 
-## 5: Watching kubernetes resources
+## 6: Watching kubernetes resources
 
 Apart from being able to run the usual CRUD operations, we can also ask the kubernetes client to notify us when a resource or list of resources has changed. If you run the following command:
 
@@ -396,10 +411,13 @@ var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
 <details>
   <summary style="font-size:24px; font-weight:bold;">&#10067;Quiz</summary></h3>
 
+<ul>
+
 ```powershell
 kubectl get namespaces -o json
 ```
 
+</ul>
 </details>
 
 <!-- markdownlint-enable MD033 -->
@@ -408,6 +426,7 @@ kubectl get namespaces -o json
 <details>
   <summary style="font-size:24px; font-weight:bold;">&#127873; Bonus</summary>
 
+<ul>
 Run the following commands to download and view the kubernetes api details using OpenApi. Note: if you are running Docker for Windows make sure you are using Linux containers.
 
 ```powershell
@@ -421,7 +440,7 @@ docker run --rm -p 8081:8080 -e SWAGGER_JSON=/foo/k8s.json -v $pwd/openapi:/foo 
 You should now be able to view to kubernetes api details by navigating to [http://localhost:8081](http://localhost:8081)
 
 You can also use the OpenApi details to import a collection into [Postman](https://learning.postman.com/docs/integrations/available-integrations/working-with-openAPI/), or any other OpenApi client.
-
+</ul>
 </details>
 <!-- markdownlint-enable MD033 -->
 
