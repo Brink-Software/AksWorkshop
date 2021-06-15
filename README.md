@@ -10,5 +10,5 @@ This workshop consist of several presentations and the following Labs:
 4. [Configuring your kubernetes applications](labs/lab4-configuration/LAB.md)
 5. [Exposing your application with kubernetes networking](labs/lab5-networking)
 6. [Storing and preserving application data with volumes](labs/lab6-volumes)
-7. [Troubleshooting](labs/lab7-troubleshooting)
-8. [Deploying you applications with helm and Azure DevOps](labs/lab8-deploy/LAB.md)
+8. [Deploying you applications with helm and Azure DevOps](labs/lab7-deploy/LAB.md)
+7. [Troubleshooting](labs/lab8-troubleshooting)
