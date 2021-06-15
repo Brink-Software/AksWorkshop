@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "failure.name" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "failure.name" . }}
+    helm.sh/chart: {{ include "failure.chart" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+spec:  
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: {{ include "failure.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
