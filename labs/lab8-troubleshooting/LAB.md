@@ -19,7 +19,7 @@ helm upgrade failure .\helm\ --install --namespace lab8 --wait --atomic --create
 
 Your job for this lab is to identitify the problems, solve them and get the deployment up and running. When all issues are resolved the result should look like this:
 
-![Navigate to namespaces](./images/result.png)
+![The working application](./images/result.png)
 
 <!-- markdownlint-disable MD033 -->
 <p>

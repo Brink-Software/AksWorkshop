@@ -57,3 +57,25 @@ Fix the type in the repository definition: repository: mcr.mi**cr**osoft.com/dot
 ### Remarks
 
 ImagePullBackOff or ImageErr errors can happen if there are problems accessing the container image registry. This include access and permissione issues and wrong names or labels.
+
+## The pods won't start
+The pods could not be started because there where problems with the workload. The restart counter of the pod is increasing as well.
+
+The waiting reason is: `CrashLoopBackOff` or `ContainersNotReady` with the message `containers with unready status: [failure]`. 
+
+### Solution
+
+In the deployment file the livenessProbe and readinessProbe point to a /health endpoint that does not exist. Set the path to `/`.
+
+### Remarks
+
+Typically you can see a high restart count when the workload of the application is not working as expected. This could be due to startup problems of the application or misconfigured probes.
+
+Don't forget to view the (live) logs of the pod, they might show valueable information that can help fix the problem.
+
+You can check the probes using the Azure Application Gateway as well using these steps:
+
+- Browse to the gateway and from the menu choose `Health Probes`
+![Check the probes](.././images/gateway-health-test.png)
+- Tick the box and press the `Test` button
+![Test Result](.././images/gateway-health-failure.png)
