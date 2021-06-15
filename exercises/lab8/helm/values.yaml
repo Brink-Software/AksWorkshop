@@ -1,0 +1,29 @@
+# Default values for ibis-digitaalmeten-spa.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+nameOverride: ""
+host: "failure.nl"
+
+replicaCount: 2
+
+image:
+#  repository: mcr.mircosoft.com/dotnet/samples
+  repository: mcr.microsoft.com/dotnet/samples
+  tag: aspnetapp
+  pullPolicy: IfNotPresent
+
+service:
+  port: 80
+
+resources:
+  limits:
+    cpu: 1000m
+#    memory: 65536Mi
+  requests:
+    cpu: 200m
+#    memory: 65536Mi
+
+#nodeSelector:
+#  kubernetes.io/os: windows
+
+affinity: {}

@@ -1,6 +1,6 @@
 # Lab 8. Troubleshooting Deployments
 
-Examine the Helm Chart located at. Deploy the chart to the cluster using any method you like and watch it fail. 
+Examine the Helm chart located in the folder [exercises/lab8](../../exercises/lab8). Deploy the chart to the cluster using any method you like and watch it fail. 
 
 If you have troubles deploying the chart use the hint below.
 
