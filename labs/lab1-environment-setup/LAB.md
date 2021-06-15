@@ -8,7 +8,7 @@
 4. Setup access credentials for the newly created cluster in step 1.
 
 ```powershell 
-az aks get-credentails -n <clusterName> -g <clusterResourcegroupName>
+az aks get-credentials -n <clusterName> -g <clusterResourcegroupName>
 ```
 
 [next :arrow_forward:](../lab2-exploring-k8s-api/LAB.md)

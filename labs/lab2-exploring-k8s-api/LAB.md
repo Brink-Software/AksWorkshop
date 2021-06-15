@@ -3,7 +3,7 @@
 #### In this lab we will explore the kubernetes api using the proxy, kubectl, VS Code, the azure portal and C#
 
 ## 1. Explore the apiserver using the proxy
-Run the following command to start the proxy. The proxy will handle exposing and authentication to the kubernetes apiserver.
+Run the following command to start the proxy. The proxy will handle exposing of and authentication to the kubernetes apiserver.
 
 ```powershell
 kubectl proxy --port 8080
@@ -15,7 +15,7 @@ Open another powershell terminal to start exploring the api, and run the followi
 $api = "http://localhost:8080"
 ```
 
-We can now start exploring the kubeserver api, run the following command to query the api versions.
+We can now start exploring the kubeserver api, run the following command to query the api versions:
 
 ```powershell
 Invoke-RestMethod -Uri $api/api | ConvertTo-Json
@@ -33,25 +33,25 @@ Invoke-RestMethod -Uri $api/api | ConvertTo-Json
 </p>
 <!-- markdownlint-enable MD033 -->
 
-Run the following command to query the nodes in the cluster
+Run the following command to query the nodes in the cluster:
 
 ```powershell
 Invoke-RestMethod -Uri $api/api/v1/nodes | ConvertTo-Json
 ```
 
-Run the following command to query the namespaces in the cluster
+Run the following command to query the namespaces in the cluster:
 
 ```powershell
 Invoke-RestMethod -Uri $api/api/v1/namespaces | ConvertTo-Json
 ```
 
-Run the following command to query the pods in the kube-system namespace
+Run the following command to query the pods in the kube-system namespace:
 
 ```powershell
 Invoke-RestMethod -Uri $api/api/v1/namespaces/kube-system/pods | ConvertTo-Json
 ```
 
-We can also create items using the api, to create a namespace add this following [file](../../exercises/lab2/namespace.json) to you current directory `exercises/lab2/namespace.json`. You can then create the namespace by running the following command:
+We can also create items using the api, to create a namespace add the file [file](../../exercises/lab2/namespace.json) to you current directory `exercises/lab2/namespace.json`. You can then create the namespace by running the following command:
 
 ```powershell
 Invoke-RestMethod -Uri $api/api/v1/namespaces -Method POST  -ContentType application/json -InFile ./exercises/lab2/namespace.json   | ConvertTo-Json
@@ -69,7 +69,7 @@ We can also edit the namespace using the proxy, edit the json and add an extra l
 Invoke-RestMethod -Uri $api/api/v1/namespaces/dev -Method PUT  -ContentType application/json -InFile ./exercises/lab2/namespace.json   | ConvertTo-Json
 ```
 
-Finally lets delete the namespace by running the following command:
+Finally let's delete the namespace by running the following command:
 
 ```powershell
 Invoke-RestMethod -Uri $api/api/v1/namespaces/dev -Method DELETE | ConvertTo-Json
@@ -139,7 +139,7 @@ Editing the namespace can be done by running the following command:
 kubectl edit ns dev
 ```
 
-This should open the default `KUBE_EDITOR` with the current namespace yaml definition, you can then edit this file and place and save it to update the namespace.
+This should open the default `KUBE_EDITOR` with the current namespace yaml definition, you can then edit this file in place and save it to update the namespace.
 
 The namespace can be deleted by running the following command:
 
@@ -153,13 +153,13 @@ Instead of using the create and edit commands you can also use the apply command
 kubectl apply -f ./exercises/lab2/namespace.json
 ```
 
-If you run the command again you should see the follwing output:
+If you run the command again you should see the following output:
 
 ```text
 namespace/dev unchanged
 ```
 
-if you edit the file to add or remove the author label and apply it again you should get the following output:
+When you edit the file to add or remove the author label and apply it again you should get the following output:
 
 ```text
 namespace/dev configured
@@ -179,7 +179,7 @@ Navigate to the [azure portal](https://portal.azure.com) and find your newly cre
 Then navigate to the namespaces tab uncer `Kubernetes resources`, and create, update and delete the dev namespace again.
 ![Navigate to namespaces](./images/navigate_namespaces_in_portal.png)
 
-While your in the portal take the time to explore the other tabs under the kubernetes resources section. We will be discussing almost all of these resources in this workshop
+While you are in the portal take the time to explore the other tabs beneath the kubernetes resources section. We will be discussing almost all of these resources in this workshop.
 
 ## 4. Explore the apiserver using C# and .Net Core
 Kubernetes also has [client libraries](https://kubernetes.io/docs/reference/using-api/client-libraries/) that allow you to manages your cluster from code. In this exercise we will use the [.Net library](https://github.com/kubernetes-client/csharp) to explore the api.
@@ -198,6 +198,7 @@ Open the `Program.cs` file and replace the code with following:
 ```C#
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using k8s;
 using k8s.Models;
@@ -354,7 +355,7 @@ Edit the main function so it is calling the `WatchNamespaces` method, and run th
 
 ## :exclamation: Kubernetes api Security
 
-In [lab1](./lab1-environment-setup/LAB.md) when you ran the `az aks get-credentails` command you added information locally about how to access the cluster. This information is being used when accessing the cluster locally. You can view this information by running the following command:
+In [lab1](./lab1-environment-setup/LAB.md) when you ran the `az aks get-credentials` command you added information locally about how to access the cluster. This information is being used when accessing the cluster locally. You can view this information by running the following command:
 
 ```powershell
 kubectl config view
@@ -385,7 +386,7 @@ users:
     token: REDACTED
 ```
 
-This config file contains all the information necessary to access the cluster and perform most operations. When using the .net client we are  authenticationg using this file, you can see that on line 13 of `Progam.cs`
+This config file contains all the information necessary to access the cluster and perform most operations. When using the .net client we are  authenticationg using this file, you can see that on line 13 of the `Program.cs` file.
 
 ```C#
 var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
@@ -407,7 +408,7 @@ kubectl get namespaces -o json
 <details>
   <summary style="font-size:24px; font-weight:bold;">&#127873; Bonus</summary>
 
-Run the following commands to download and view the kubernetes api details using OpenApi.
+Run the following commands to download and view the kubernetes api details using OpenApi. Note: if you are running Docker for Windows make sure you are using Linux containers.
 
 ```powershell
 kubectl proxy --port 8080
