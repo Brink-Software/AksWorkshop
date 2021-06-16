@@ -146,7 +146,7 @@ samplewebapp   LoadBalancer   10.2.2.20    20.93.176.14   80:31740/TCP   17s
 
 We can now navigate to this IP address and see our now familiar web page.
 
-## 2. Scaling up with ReplicaSets
+## 2. Scaling out with ReplicaSets
 
 Lets simulate an application error that crashes the pod by deleting it.
 
