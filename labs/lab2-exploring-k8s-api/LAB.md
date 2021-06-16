@@ -341,7 +341,7 @@ dev                       Terminating   6s
 dev                       Terminating   6s
 ```
 
-We can also watch for changes using the .net client, lets add the following method to our project:
+We can also watch for changes using the .net client, let's add the following method to our project:
 
 ```C#
 private static async Task WatchNamespaces(Kubernetes client)
