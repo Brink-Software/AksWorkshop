@@ -200,7 +200,20 @@ kubectl get all
 kubectl describe replicasets/samplewebapp
 ```
 
-Let's expose the pods again but this time by exposing the `ReplicaSet`
+<!-- markdownlint-disable MD033 -->
+<p>
+<details>
+  <summary>&#x2757; Note </summary>
+<ul>  
+  <p> So far we have been using imperative commands to manage objects, in the above example we are using declarative object configuration to manage the kubernetes objects. You can read more about this <a href="https://kubernetes.io/docs/concepts/overview/working-with-objects/object-management/">here</a>.</p>
+</ul>
+</details>
+</p>
+<!-- markdownlint-enable MD033 -->
+
+
+
+Lets expose the pods again but this time by exposing the `ReplicaSet`
 
 ```powershell
 kubectl expose replicaset/samplewebapp --port 80 --type LoadBalancer
