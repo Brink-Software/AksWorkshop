@@ -21,14 +21,14 @@ Your job for this lab is to identitify the problems, solve them and get the depl
 
 ![The working application](./images/result.png)
 
-<!-- markdownlint-disable MD033 -->
-<p>
-<details>
-  <summary>&#x261d; &#xfe0f; Resources </summary>
-  <p><a href="https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application/#debugging-pods">Troubleshoot Applications</a></p>
-</details>
-</p>
-<!-- markdownlint-enable MD033 -->
+## Resources
+
+Ways to troubleshoot your application:
+
+[Troubleshoot Applications](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application/#debugging-pods)
+
+There is also this short video guiding you trough some options.
+[![How To Debug A Kubernetes Application](https://res.cloudinary.com/marcomontalbano/image/upload/v1623867284/video_to_markdown/images/youtube--aCcIdG82KxA-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=aCcIdG82KxA "How To Debug A Kubernetes Application")
 
 <!-- markdownlint-disable MD033 -->
 <details>
