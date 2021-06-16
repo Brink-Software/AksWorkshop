@@ -2,6 +2,8 @@
 
 ## 1. Configuring your application using environment variables.
 
+In 2011 the developers at [Heroku](https://www.heroku.com/) presented a methodology for building software-as-a-service application [The Twelve-Factor App](https://12factor.net/) methodology. The 3rd of these twelve factors is to store config in the environment you can read more about this [here](https://12factor.net/config). Containerized application allow us to set environment variables to provide dynamic configuration. 
+
 ## 2. Configuring sensitive information using `Secrets`
 
 ## 3. Preventing resource starvation with resource request and limits
