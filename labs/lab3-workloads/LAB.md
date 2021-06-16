@@ -4,14 +4,14 @@
 
 ## 1. Creating and running a pod in kubernetes
 
-Lets start by creating a namespace for all the work we will be doing this lab, and setting it as the default namespace.
+Let's start by creating a namespace for all the work we will be doing this lab, and setting it as the default namespace.
 
 ```powershell
 kubectl create namespace lab3 
 kubectl config set-context --current --namespace=lab3
 ```
 
-Now lets create a new .NET 5 web application, you can follow along with the steps here or you can use visual studio and add docker support.
+Now let's create a new .NET 5 web application, you can follow along with the steps here or you can use visual studio and add docker support.
 
 ```powershell
 mkdir lab3
@@ -82,7 +82,7 @@ One you have navigated to your Container registry, you will find your image unde
 
 ![ACR image](./images/acr_image.png)
 
-Before we deploy the container to our cluster lets first test it locally
+Before we deploy the container to our cluster let's first test it locally
 
 ```powershell
 # login into to the azure container registry
@@ -122,7 +122,7 @@ kubectl port-forward samplewebapp 8083:80
 
 But instead we will expose the pod using a kubernetes service object. We will be diving into services in greater detail in Lab 5.
 
-Lets run the commands below to expose the pod using a public IP address.
+Let's run the commands below to expose the pod using a public IP address.
 
 ```powershell
 kubectl expose po/samplewebapp --port 80 --type LoadBalancer
@@ -148,7 +148,7 @@ We can now navigate to this IP address and see our now familiar web page.
 
 ## 2. Scaling out with ReplicaSets
 
-Lets simulate an application error that crashes the pod by deleting it.
+Let's simulate an application error that crashes the pod by deleting it.
 
 ```powershell
 kubectl delete po samplewebapp 
@@ -162,7 +162,7 @@ This is where `ReplicaSets` can help, they give us two great benefits:
 
 2. Reconciliation loops, kubernetes will be continuously checking the desired state (number of replicas) vs the observed/current state, and will take action to ensure the observed state matches the desired state. You can read more about this [here](https://kubernetes.io/docs/concepts/architecture/controller/).
 
-First lets delete the service, we will create another one soon.
+First let's delete the service, we will create another one soon.
 
 ```powershell
 kubectl delete service/samplewebapp
@@ -192,7 +192,7 @@ spec:
         name: samplewebapp
 ```
 
-Now lets create the `ReplicaSet` and inspect the created resources
+Now let's create the `ReplicaSet` and inspect the created resources
 
 ```powershell
 kubectl apply -f ./samplewebapp.rs.yaml
@@ -200,7 +200,7 @@ kubectl get all
 kubectl describe replicasets/samplewebapp
 ```
 
-Lets expose the pods again but this time by exposing the `ReplicaSet`
+Let's expose the pods again but this time by exposing the `ReplicaSet`
 
 ```powershell
 kubectl expose replicaset/samplewebapp --port 80 --type LoadBalancer
@@ -233,7 +233,7 @@ First let us delete the resources we just created.
 kubectl delete replicaset.apps/samplewebapp  service/samplewebapp
 ```
 
-Now lets edit our web application, rebuild and run it using a new tag `v2`
+Now let's edit our web application, rebuild and run it using a new tag `v2`
 
 ```powershell
 az acr build --registry $ACR_NAME --image samplewebapp:v2 .
@@ -242,7 +242,7 @@ docker run --rm -it -p 8082:80 "$($ACR_NAME).azurecr.io/samplewebapp:v2"
 
 Navigate to http://localhost:8082 and check that the output is as espected.
 
-Next lets rename or copy `samplewebapp.rs.yaml` file to `samplewebapp.deployment.yaml` and change the Kind property from `ReplicaSet` to `Deployment`. 
+Next let's rename or copy `samplewebapp.rs.yaml` file to `samplewebapp.deployment.yaml` and change the Kind property from `ReplicaSet` to `Deployment`. 
 
 We can create the deployment resources and expose the pods.
 
@@ -254,24 +254,24 @@ kubectl get service samplewebapp -w
 
 Our web application should now be available on the service external IP address.
 
-Now lets open a seperate terminal and run the following command to start watching any deployments we might have.
+Now let's open a seperate terminal and run the following command to start watching any deployments we might have.
 
 ```powershell
 kubectl get deployments -w -owide
 ```
-Open another terminal and lets start watching the replicasets
+Open another terminal and let's start watching the replicasets
 
 ```powershell
 kubectl get replicasets -w -owide
 ```
 
-Open a 3rd terminal and lets watch the pods
+Open a 3rd terminal and let's watch the pods
 
 ```powershell
 kubectl get pods -w -owide
 ```
 
-Lets now edit the file `samplewebapp.deployment.yaml` and change the image tag to `v2` and lets apply this file again.
+Let's now edit the file `samplewebapp.deployment.yaml` and change the image tag to `v2` and let's apply this file again.
 
 ```powershell
 kubectl apply -f ./samplewebapp.deployment.yaml --record
@@ -389,7 +389,7 @@ From the [docs](https://kubernetes.io/docs/concepts/workloads/controllers/cron-j
 >
 > CronJobs are useful for creating periodic and recurring tasks, like running backups or sending emails. CronJobs can also schedule individual tasks for a specific time, such as scheduling a Job for when your cluster is likely to be idle.
 
-Lets finish up by deleting the `lab3` namespace and resetting the default namespace in our configuration file.
+Let's finish up by deleting the `lab3` namespace and resetting the default namespace in our configuration file.
 
 ```powershell
 kubectl delete namespace lab3 
