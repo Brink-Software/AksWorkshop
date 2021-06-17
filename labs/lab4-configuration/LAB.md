@@ -1,5 +1,7 @@
 # Lab 4. Configuring your kubernetes applications 
 
+### In this lab we will experiment with the different ways change the behavior of your application.
+
 ## 1. Configuring your application using environment variables.
 
 In 2011 the developers at [Heroku](https://www.heroku.com/) presented a methodology for building software-as-a-service application [The Twelve-Factor App](https://12factor.net/) methodology. The 3rd of these twelve factors is to store config in the environment you can read more about this [here](https://12factor.net/config). Over the following exercises we will be looking at different ways to do this with kubernetes.
@@ -135,7 +137,7 @@ spec:
         app: configapp
     spec:
       containers:
-      - image: arcbc5524.azurecr.io/configwebapp:v1
+      - image: <acrname>.azurecr.io/configwebapp:v1
         name: configwebapp
 
 ```
@@ -164,27 +166,229 @@ kubectl apply -f resources/
 kubectl get service configapp -w
 ```
 
-One we have an assigned EXTERNAL-IP you should be able to visit the application and see the already configured values.
+One we have an assigned EXTERNAL-IP you should be able to visit the application and see any already configured values.
 
+We can now start adding our own configuration values.
 
+<!-- markdownlint-disable MD033 -->
+<p>
+<details>
+  <summary>&#x2757; Note </summary>
+<ul>  
+  <p>We will be adding and changing various properties in our yaml files from now on. If you are curious about what properties you can configure and how you can use the <code>kubectl explain</code> command. This will give you a description of the entity and any fields it might have. You can navigate down to specific fields, or you can also ask for a recursive explanation. Below are a few commands you can try out.</p>
 
+```powershell
+kubectl explain pod
+kubectl explain service --recursive
+kubectl explain service.spec.selector
+kubectl explain pod.spec.containers.env
+kubectl explain pod.spec.containers.env --recursive
+```
+</ul>
+</details>
+</p>
+<!-- markdownlint-enable MD033 -->
 
+Let's edit the deployment.yaml file and add the following properties to containers field, and reapply the resources folder.
 
+```text
+env:
+- name: test1
+  value: value1
+- name: test2
+  value: value2 
+```
 
+```powershell
+kubectl apply -f resources/
+```
 
+If you refresh the app you should now see your newly configured variables.
 
-
+We can also use `ConfigMap`  resources to configure our applications. Take the time to read, understand and try some of the exercises [here](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/). 
 
 ## 2. Configuring sensitive information using `Secrets`
 
-## 3. Preventing resource starvation with resource request and limits
+Kubernetes also has `Secret` resources that allow you to store sensitive information. Kubernetes does treat secrets differently however secrets are stored as unencrypted base64-encoded strings and as such should not be considered secure.   
+
+You can read more about Secrets [here](https://kubernetes.io/docs/concepts/configuration/secret/#details).
+
+Lets create a `Secret` and expose it to our application. Run the follwing command to add a secrets.yaml file to the resources folder.
+
+```powershell
+kubectl create secret generic my-secret --from-literal=SqlConnectionString="Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;" --from-literal=StorageConnectionString="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;"  --dry-run=client -oyaml > .\resources\secrets.yaml
+```
+
+Now lets add the secrets to our application by adding the following properties to containers field and reapplying the resources folder.
+
+```yaml
+envFrom:
+- secretRef:
+    name: my-secrets
+```
+
+```powershell
+kubectl apply -f resources/
+```
+
+If you refresh the app you should now see your newly configured variables.
+
+## 3. Beter secrets using managed pod identity to access key vault
+
+There is a beter way to access sensitive data in our application and that is by using [AAD Pod Identity](https://github.com/Azure/aad-pod-identity). When we created our environment in [lab 1](..\lab1-environment-setup\LAB.md) we already set up AAD Pod Identity, over the next few steps we will configure our application to use it to securely access credentials in [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/).
+
+Let's start off by creating a user assigned managed identity.
+
+```powershell
+az group create -l westeurope -n rg-lab4
+az identity create -l westeurope -n id-lab4 -g rg-lab4
+```
+
+Assign `Managed Identity Operator` role to the cluster identity.
+
+```powershell
+$ID=az aks show -g rg-akskickstart-dev -n aks-akskickstart-dev --query identityProfile.kubeletidentity.clientId -o tsv
+$SCOPE=az group show -g rg-lab4 --query id -otsv 
+az role assignment create --role "Managed Identity Operator" --assignee $ID --scope $SCOPE
+```
+
+Create the key vault, add some secrets and ensure that our newly created managed identity can get and list secrets. 
+
+```powershell
+az keyvault create --name <kv-lab4-your-name> -g rg-lab4 -l westeurope
+az keyvault secret set --name SqlConnectionString --vault-name <kv-lab4-your-name> --value "Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;" 
+$OBJECT_ID=az identity show  -n id-lab4 -g rg-lab4 --query "principalId" -otsv
+az keyvault set-policy --name <kv-lab4-your-name> --object-id $OBJECT_ID --secret-permissions get list 
+```
+
+
+Configure our application to populate the configuration from key vault, and add the required nuget packages.
+> Note:
+We are using a custom `ChainedTokenCredential` so that it picks up the credentials from the azure client from Visual Studio. You can read more about this [here](https://docs.microsoft.com/en-us/dotnet/api/overview/azure/identity-readme#define-a-custom-authentication-flow-with-the-chainedtokencredential)
+
+```C#
+public static IHostBuilder CreateHostBuilder(string[] args) =>
+    Host.CreateDefaultBuilder(args)
+        .ConfigureAppConfiguration((context, config) =>
+        {
+            var builtConfig = config.Build();
+            var credential = new ChainedTokenCredential(new ManagedIdentityCredential(), new AzureCliCredential());
+            config.AddAzureKeyVault(new Uri(builtConfig["KeyVaultBaseUri"]), 
+                credential);
+        })
+        .ConfigureWebHostDefaults(webBuilder =>
+        {
+            webBuilder.UseStartup<Startup>();
+        });
+```
+
+```powershell
+dotnet add package Azure.Extensions.AspNetCore.Configuration.Secrets  
+dotnet add package Azure.Identity  
+```
+
+Before you run the application make sure to add the `KeyVaultBaseUri` to you appsettings.Development.json. 
+
+
+```json
+{
+  "KeyVaultBaseUri": "https://<kv-lab4-your-name>.vault.azure.net/",
+  "DetailedErrors": true,
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  }
+}
+```
+
+Let's rebuild the container with a new `v2` tag. We can test this locally but it would entail quite a bit of set up so we will skip that  this time.  
+
+```powershell
+az acr build --registry $ACR_NAME --image configwebapp:v2 .
+```
+
+We can now add the identity resources and configure application and reapply the resources.
+
+First lets add the following file to the resources folder, replace the `<clientId>` and `<resourceID>` fields with the values from the following command:
+
+```powershell
+az identity show  -n id-lab4 -g rg-lab4 --query '{ clientId:clientId,   resourceID:id }' -ojsonc
+```
+
+
+identity.yaml
+
+```text
+apiVersion: "aadpodidentity.k8s.io/v1"
+kind: AzureIdentity
+metadata:
+  name: id-lab4
+  annotations:
+    aadpodidentity.k8s.io/Behavior: namespaced    
+spec:
+  type: 0
+  resourceID:<resourceID>
+  clientID: <clientID>
+---
+apiVersion: "aadpodidentity.k8s.io/v1"
+kind: AzureIdentityBinding
+metadata:
+  name: id-lab4-binding
+spec:
+  azureIdentity: id-lab4
+  selector: id-lab4
+```
+
+Then lets configure an environment variable for the `KeyVaultBaseUri` property, and add the `aadpodidbinding` label in the deployment.yaml file.
+
+```text
+template:
+  metadata:
+    labels:
+      app: configapp
+      aadpodidbinding: id-lab4
+  spec:
+    containers:
+    - image: <acrname>.azurecr.io/configwebapp:v1
+      name: configwebapp
+      env:
+      - name: KeyVaultBaseUri
+        value: https://<kv-lab4-your-name>.vault.azure.net/
+```
+
+Cool we can reapply the resources forder and watch the magic happen.
+
+```powershell
+kubectl apply -f resources/
+```
+
+It will take a bit longer for the resources to be provisioned this time, but one everything is up and running you should be able to see the secret you created earlier. You can now add a new secret to to the key vault, add restart the app by deleting the pod. You should then also be able to see the new secret.
+
+```powershell
+az keyvault secret set --name MyNewSecret --vault-name <kv-lab4-your-name> --value "MySecretValue"
+kubectl delete po --all
+```
+
+We can also examine the resources to get insight into what exactly happened.
+
+ ```powershell
+ kubectl get AzureIdentity
+ kubectl get AzureIdentityBinding
+ kubectl get AzureAssignedIdentity
+ kubectl get Events
+ ```
+ 
+You can find out more about AAD Pod Identity [here](https://azure.github.io/aad-pod-identity/docs/).
+
+## 4. Preventing resource starvation with resource request and limits
 
 From the [docs](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#resource-types):
 > **Note:** If a Container specifies its own memory limit, but does not specify a memory request, Kubernetes automatically assigns a memory request that matches the limit. Similarly, if a Container specifies its own CPU limit, but does not specify a CPU request, Kubernetes automatically assigns a CPU request that matches the limit.
 
-## 4. Configuring Liveness, Readiness, Startup probes and pod lifecycle.
-
-## 5. Using managed pod identity to access key vault secrets
+## 5. Configuring Liveness, Readiness, Startup probes and pod lifecycle.
 
 ## 6. Managing pod placement
 
