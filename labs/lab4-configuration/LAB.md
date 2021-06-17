@@ -385,13 +385,82 @@ You can find out more about AAD Pod Identity [here](https://azure.github.io/aad-
 
 ## 4. Preventing resource starvation with resource request and limits
 
+One of the many benefits of containerized applications is that they can run side by side on a machine with less overhead, this does however mean that a container can potentially use up all the machine resources. To ensure that this does not happen it is a best practice to ensure that you application has resource request and limits  in place.  
+
+
 From the [docs](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#resource-types):
 > **Note:** If a Container specifies its own memory limit, but does not specify a memory request, Kubernetes automatically assigns a memory request that matches the limit. Similarly, if a Container specifies its own CPU limit, but does not specify a CPU request, Kubernetes automatically assigns a CPU request that matches the limit.
 
+We can examine these properties using the `kubectl explain` command.
+
+```powershell
+ kubectl explain pod.spec.containers.resources.requests.cpu 
+ kubectl explain pod.spec.containers.resources.limits.requests.memory 
+```
+
+Below is an example of a `Pod` with resource requests and limits.
+
+example.yaml
+
+```text
+apiVersion: v1
+kind: Pod
+metadata:
+  name: frontend
+spec:
+  containers:
+  - name: app
+    image: images.my-company.example/app:v4
+    resources:
+      requests:
+        memory: "64Mi"
+        cpu: "250m"
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+```
+
+You can find out more about managing resources for containers [here](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
 ## 5. Configuring Liveness, Readiness, Startup probes and pod lifecycle.
+
+### Init containers
+
+### Startup Prope
+
+### Liveness Prope
+
+### Readiness Prope
+> A pod with containers reporting that they are not ready does not receive traffic through Kubernetes Services.
+
+### postStart
+
+### preStop
 
 ## 6. Managing pod placement
 
+### Taints and Tolerations
+
+### NodeSelector
+
+### Other
+- [Node affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
+- [Inter-pod affinity and anti-affinity ](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity)
+- [nodeName](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodename)
+
 ## 7. Configuring apiserver access with Pod Service accounts
+
+### Rolebinding and ClusterRoleBindings
+
+```powershell
+kubectl get clusterroles
+kubectl get clusterroles aad-pod-identity-mic -oyaml
+```
+
+### Serviceaccounts
+
+```powershell
+kubectl get serviceaccount  
+```
 
 [:arrow_backward: previous](../lab3-workloads/LAB.md)  [next :arrow_forward:](../lab5-networking/LAB.md)
