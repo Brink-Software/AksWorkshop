@@ -440,7 +440,7 @@ spec:
 
 You can find out more about managing resources for containers [here](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
 
-## 5. Configuring Liveness, Readiness, Startup probes and pod lifecycle.
+## 5. Configuring Liveness, Readiness, Startup probes and Pod lifecycle
 
 ### Propes
 
