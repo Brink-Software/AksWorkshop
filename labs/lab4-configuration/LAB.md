@@ -78,7 +78,7 @@ Open the `Index.cshtml` file and replace the content with the following.
 </dl>
 ```
 
-Next lets add a `Dockerfile` with the following content.
+Next let's add a `Dockerfile` with the following content.
 
 ```text
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
@@ -105,14 +105,14 @@ COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Lab4.dll"]
 ```
 
-Cool now lets build run and check the application.
+Cool now let's build run and check the application.
 
 ```powershell
 az acr build --registry $ACR_NAME --image configwebapp:v1 .
 docker run --rm -it -p 8082:80 "$($ACR_NAME).azurecr.io/configwebapp:v1" 
 ```
 
-We can now run our application in kubernetes lets prepare some files so we can create our resources using declarative object configuration. 
+We can now run our application in kubernetes let's prepare some files so we can create our resources using declarative object configuration. 
 
 Create a folder named resources and add the following files.
 
@@ -213,13 +213,13 @@ Kubernetes also has `Secret` resources that allow you to store sensitive informa
 
 You can read more about Secrets [here](https://kubernetes.io/docs/concepts/configuration/secret/#details).
 
-Lets create a `Secret` and expose it to our application. Run the follwing command to add a secrets.yaml file to the resources folder.
+Let's create a `Secret` and expose it to our application. Run the follwing command to add a secrets.yaml file to the resources folder.
 
 ```powershell
 kubectl create secret generic my-secret --from-literal=SqlConnectionString="Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;" --from-literal=StorageConnectionString="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;"  --dry-run=client -oyaml > .\resources\secrets.yaml
 ```
 
-Now lets add the secrets to our application by adding the following properties to containers field and reapplying the resources folder.
+Now let's add the secrets to our application by adding the following properties to containers field and reapplying the resources folder.
 
 ```yaml
 envFrom:
@@ -261,10 +261,18 @@ $OBJECT_ID=az identity show  -n id-lab4 -g rg-lab4 --query "principalId" -otsv
 az keyvault set-policy --name <kv-lab4-your-name> --object-id $OBJECT_ID --secret-permissions get list 
 ```
 
-
 Configure our application to populate the configuration from key vault, and add the required nuget packages.
-> Note:
-We are using a custom `ChainedTokenCredential` so that it picks up the credentials from the azure client from Visual Studio. You can read more about this [here](https://docs.microsoft.com/en-us/dotnet/api/overview/azure/identity-readme#define-a-custom-authentication-flow-with-the-chainedtokencredential)
+
+<!-- markdownlint-disable MD033 -->
+<p>
+<details>
+  <summary>&#x2757; Note </summary>
+<ul>  
+  <p> We are using a custom <code>ChainedTokenCredential</code> so that it picks up the credentials from the azure cli instead of Visual Studio. You can read more about this <a href="https://docs.microsoft.com/en-us/dotnet/api/overview/azure/identity-readme#define-a-custom-authentication-flow-with-the-chainedtokencredential">here</a>.</p>
+</ul>
+</details>
+</p>
+<!-- markdownlint-enable MD033 -->
 
 ```C#
 public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -287,8 +295,7 @@ dotnet add package Azure.Extensions.AspNetCore.Configuration.Secrets
 dotnet add package Azure.Identity  
 ```
 
-Before you run the application make sure to add the `KeyVaultBaseUri` to you appsettings.Development.json. 
-
+Before you run the application make sure to add the `KeyVaultBaseUri` to you appsettings.Development.json.
 
 ```json
 {
@@ -312,7 +319,7 @@ az acr build --registry $ACR_NAME --image configwebapp:v2 .
 
 We can now add the identity resources and configure application and reapply the resources.
 
-First lets add the following file to the resources folder, replace the `<clientId>` and `<resourceID>` fields with the values from the following command:
+First let's add the following file to the resources folder, replace the `<clientId>` and `<resourceID>` fields with the values from the following command:
 
 ```powershell
 az identity show  -n id-lab4 -g rg-lab4 --query '{ clientId:clientId,   resourceID:id }' -ojsonc
@@ -342,7 +349,7 @@ spec:
   selector: id-lab4
 ```
 
-Then lets configure an environment variable for the `KeyVaultBaseUri` property, and add the `aadpodidbinding` label in the deployment.yaml file.
+Then let's configure an environment variable for the `KeyVaultBaseUri` property, and add the `aadpodidbinding` label in the deployment.yaml file.
 
 ```text
 template:
@@ -387,9 +394,20 @@ You can find out more about AAD Pod Identity [here](https://azure.github.io/aad-
 
 One of the many benefits of containerized applications is that they can run side by side on a machine with less overhead, this does however mean that a container can potentially use up all the machine resources. To ensure that this does not happen it is a best practice to ensure that you application has resource request and limits  in place.  
 
+<!-- markdownlint-disable MD033 -->
+<p>
+<details>
+  <summary>&#x2757; Note </summary>
+<ul>  
 
 From the [docs](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/#resource-types):
-> **Note:** If a Container specifies its own memory limit, but does not specify a memory request, Kubernetes automatically assigns a memory request that matches the limit. Similarly, if a Container specifies its own CPU limit, but does not specify a CPU request, Kubernetes automatically assigns a CPU request that matches the limit.
+> **Note:** If a Container specifies its own memory limit, but does not specify a memory request, Kubernetes automatically assigns a memory request that matches the limit. Similarly, if a Container specifies its own CPU limit, but does not specify a CPU request, Kubernetes automatically assigns a CPU request that matches the limitP
+
+</ul>
+</details>
+</p>
+<!-- markdownlint-enable MD033 -->
+
 
 We can examine these properties using the `kubectl explain` command.
 
@@ -424,43 +442,183 @@ You can find out more about managing resources for containers [here](https://kub
 
 ## 5. Configuring Liveness, Readiness, Startup probes and pod lifecycle.
 
-### Init containers
+### Propes
 
-### Startup Prope
+Kubernetes containers can be configured with the following propes.
 
-### Liveness Prope
+- [Liveness](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy), this is a probe that will run to determine if you container is still functioning, if the probe fails the pod will be terminated and restarted depending on the pod [`restartPolicy`](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#restart-policy).
+- [Startup](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#when-should-you-use-a-startup-probe), this probe is good for containers that require a long startup periods. This probe can the be configured differently from the Liveness probe.
+- [Readiness](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#when-should-you-use-a-readiness-probe), this probe is used to determine if the Pod is ready to receive traffic through Kubernetes Services.
 
-### Readiness Prope
-> A pod with containers reporting that they are not ready does not receive traffic through Kubernetes Services.
+You can read more about how to configure probes [here](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
 
-### postStart
+### Pod Lifecycle
 
-### preStop
+Apart from using these propes there are also other properties that let us hook into the Pod Lifecycle. Take some time to look through the documentation [here](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/) on Pod Lifecycle.
 
-## 6. Managing pod placement
+## 6. Managing Pod Placement
 
-### Taints and Tolerations
+In aks the cluster nodes correspond to the various nodes in the node pools. You can see these node pools and nodes in the portal. These node pools are backed by [Azure Virtual Machine Scale Sets](https://docs.microsoft.com/en-us/azure/virtual-machine-scale-sets/overview), and we can use the [cluster autoscaler](https://docs.microsoft.com/en-us/azure/aks/cluster-autoscaler) to automatically scale these pools up and down based on resource constraints.
 
-### NodeSelector
+![Node Pools in AKS](./images/node_pools.png)
 
-### Other
+These [node pools](https://docs.microsoft.com/en-us/azure/aks/use-multiple-node-pools) allow us to have different sets of virtual machines to host our application, the most obvious example being Windows vs Linux operation systems, but there is even the option to add [virtual nodes](https://docs.microsoft.com/en-us/azure/aks/virtual-nodes).
+
+To ensure that a windows pod doesn't get scheduled on a linux node Kubernetes has the concept of Taints and Tolerations. In short this allows us to taint nodes so that Pods can only be scheduled on that node if they can tolerate the taint. You can read more about this [here](https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/).
+
+Let's taint our node and inspect the result.
+
+```powershell
+$NODE_NAME=kubectl get nodes --output=jsonpath="{.items..metadata.name}"
+kubectl taint nodes $NODE_NAME os=linux:NoSchedule
+kubectl describe node $NODE_NAME
+```
+
+You should see that the taint has been applied to this node.
+
+<!-- markdownlint-disable MD033 -->
+<p>
+<details>
+  <summary>&#x261d; &#xfe0f; Hint </summary>
+<ul>  
+  <p>You can filter the output with the following command:</p>
+
+```powershell
+kubectl describe node $NODE_NAME | Select-String Taints
+```
+
+</ul>
+</details>
+</p>
+<!-- markdownlint-enable MD033 -->
+
+Next let's try and run a pod.
+
+```powershell
+kubectl run nginx
+```
+
+If we examine the Pod we will see that the Pod is not running because `0/1 nodes are available`.
+
+```powershell
+kubectl describe po nginx
+```
+
+Let's clean up by remove our taint.
+
+```powershell
+kubectl taint nodes $NODE_NAME os=linux:NoSchedule-
+```
+
+If you examine the pod again you will see that it is running.
+
+```powershell
+kubectl describe po nginx
+```
+
+Doing this does not prevent the Pod from running on an inappropriate node, this can be done by applying a label to the node and defining a [nodeSelector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) on the Pod.
+
+Below are also links to documentation on other ways we can manage Pod Placement:
+
 - [Node affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 - [Inter-pod affinity and anti-affinity ](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity)
 - [nodeName](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodename)
 
-## 7. Configuring apiserver access with Pod Service accounts
+## 7. Configuring apiserver access with Service Accounts and RBAC
 
-### Rolebinding and ClusterRoleBindings
+In lab 2 we discovered various ways of accessing the cluster, locally this is possible because of our Kubernetes config file. We can also examine the Kubernetes resources from a Pod running in the cluster. By default all Pods have a service account attached to them. Let's have a look.
+
+```powershell
+kubectl get po nginx -oyaml | Select-String serviceAccount
+kubectl describe sa default
+$SECRET_NAME = kubectl get sa default -o jsonpath="{.secrets..name}"
+kubectl describe secret $SECRET_NAME
+```
+
+If we examine the output from these commands we can see that the nginx Pod has an Service Account 'default' and that that account has a secret that contains the properties: `namespace`  `ca.cert` and `token`. We can also copy the token and navigate to [https://jwt.io/](https://jwt.io/)  and examine it futher.
+
+```json
+{
+  "iss": "kubernetes/serviceaccount",
+  "kubernetes.io/serviceaccount/namespace": "lab4",
+  "kubernetes.io/serviceaccount/secret.name": "default-token-pvzfg",
+  "kubernetes.io/serviceaccount/service-account.name": "default",
+  "kubernetes.io/serviceaccount/service-account.uid": "465e698d-7f67-46db-a947-a63add7c7b7e",
+  "sub": "system:serviceaccount:lab4:default"
+}
+```
+
+Cool so we have a token let's query the api-server from a Pod. The follwing command will start the pod in interactive mode run the command `kubectl version` and the exit and delete the Pod.
+
+```powershell
+kubectl run kubectl --image bitnami/kubectl -i --rm --restart=Never -- version
+```
+
+Now let's try and querying Pods.
+
+```powershell
+kubectl run kubectl --image bitnami/kubectl -i --rm --restart=Never -- get po
+```
+
+Output:
+
+```text
+Error from server (Forbidden): pods is forbidden: User "system:serviceaccount:lab4:default" cannot list resource "pods" in API group "" in the namespace "lab4"
+```
+
+It appears that we don't have the right to list pods, this is because by default service accounts do not have permissions. We can give service account permission by using `Role` or `ClusterRole` resources to define the permissions and then use `RoleBinding` or `ClusterRoleBinding` resources assign permissions to the service account.
+
+Run the following commands to inspect the already existing `ClusterRoles`.
 
 ```powershell
 kubectl get clusterroles
-kubectl get clusterroles aad-pod-identity-mic -oyaml
+kubectl describe clusterroles aad-pod-identity-mic
+kubectl describe clusterroles view
+kubectl describe clusterroles edit
 ```
 
-### Serviceaccounts
+We can also examine the existing `ClusterRoleBindings`
 
 ```powershell
-kubectl get serviceaccount  
+kubectl get clusterrolebindings
+kubectl describe clusterrolebindings aad-pod-identity-mic
+```
+
+Let's create a `RoleBinding` for our default service account for the view `ClusterRole`, and rerun the previous command.
+
+```powershell
+kubectl create rolebinding lab4-rolebinding --serviceaccount lab4:default --clusterrole view
+kubectl run kubectl --image bitnami/kubectl -i --rm --restart=Never -- get po
+```
+
+Cool we now have permission to view the pods, let's try and get all the pods from all the namespaces.
+
+```powershell
+kubectl run kubectl --image bitnami/kubectl -i --rm --restart=Never -- get po --all-namespaces
+```
+
+Output:
+```text
+Error from server (Forbidden): pods is forbidden: User "system:serviceaccount:lab4:default" cannot list resource "pods" in API group "" at the cluster scope
+```
+
+Luckily we can fix this by creating a `ClusterRoleBinding` instead of a `RoleBinding`
+
+```powershell
+kubectl delete rolebinding lab4-rolebinding
+kubectl create clusterrolebinding lab4-rolebinding --serviceaccount lab4:default --clusterrole view
+kubectl run kubectl --image bitnami/kubectl -i --rm --restart=Never -- get po --all-namespaces
+```
+
+You can read more about RBAC in Kubernetes [here](https://kubernetes.io/docs/reference/access-authn-authz/rbac/).
+
+## 8. Cleanup
+
+Awesome Lab 4 is done let's clean up our resources.
+
+```powershell
+kubectl delete ns lab4
+kubectl delete clusterrolebinding lab4-rolebinding
 ```
 
 [:arrow_backward: previous](../lab3-workloads/LAB.md)  [next :arrow_forward:](../lab5-networking/LAB.md)
