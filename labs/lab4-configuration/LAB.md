@@ -175,7 +175,7 @@ We can now start adding our own configuration values.
 <details>
   <summary>&#x2757; Note </summary>
 <ul>  
-  <p>We will be adding and changing various properties in our yaml files from now on. If you are curious about what properties you can configure and how you can use the <code>kubectl explain</code> command. This will give you a description of the entity and any fields it might have. You can navigate down to specific fields, or you can also ask for a recursive explanation. Below are a few commands you can try out.</p>
+  <p>We will be adding and changing various properties in our yaml files from now on. If you are curious about what properties you can configure and how, you can use the <code>kubectl explain</code> command. This will give you a description of the entity and any fields it might have. You can navigate down to specific fields, or you can also ask for a recursive explanation. Below are a few commands you can try out.</p>
 
 ```powershell
 kubectl explain pod
@@ -189,7 +189,7 @@ kubectl explain pod.spec.containers.env --recursive
 </p>
 <!-- markdownlint-enable MD033 -->
 
-Let's edit the deployment.yaml file and add the following properties to containers field, and reapply the resources folder.
+Let's edit the deployment.yaml file and add the following properties on the  `spec.containers` field, and reapply the resources folder.
 
 ```text
 env:
@@ -213,7 +213,7 @@ Kubernetes also has `Secret` resources that allow you to store sensitive informa
 
 You can read more about Secrets [here](https://kubernetes.io/docs/concepts/configuration/secret/#details).
 
-Let's create a `Secret` and expose it to our application. Run the follwing command to add a secrets.yaml file to the resources folder.
+Let's create a `Secret` and expose it to our application. Run the follwing command to add a secrets.yaml file to the resources folder. This willexpose all the secrets in `my-secrets` as environment variables.
 
 ```powershell
 kubectl create secret generic my-secret --from-literal=SqlConnectionString="Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;" --from-literal=StorageConnectionString="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;"  --dry-run=client -oyaml > .\resources\secrets.yaml
