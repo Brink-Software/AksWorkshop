@@ -1,6 +1,6 @@
 # Lab 5. Exposing your application with kubernetes networking
 
-## 1. Exposing workloads using `Services`
+## 1. Exposing workloads using Services
 
 Let's start of by creating anaother application for this lab.
 First lets create an index.html file in a lab5 folder with the following content.
@@ -114,17 +114,196 @@ We can now build and test our application by running the following commands.
 az acr build -t nginxsample:v1 -r $ACR_NAME . 
 docker run --rm -it -p 8082:80 "$($ACR_NAME).azurecr.io/nginxsample:v1" 
 docker run --rm -it -p 8082:80  -e APP_COLOR=Blue -e APP_MESSAGE='Great Times!'  "$($ACR_NAME).azurecr.io/nginxsample:v1" 
-docker run --rm -it -p 8082:80  -e APP_COLOR=Red -e APP_MESSAGE='Hey Ho Let'\''s Go!'   "$($ACR_NAME).azurecr.io/nginxsample:v1" 
-
+docker run --rm -it -p 8082:80  -e APP_COLOR=Red -e APP_MESSAGE="Hey Ho Let's Go!"   "$($ACR_NAME).azurecr.io/nginxsample:v1"
 ```
 
+You can the view the website by navigating to [http://localhost:8082/](http://localhost:8082/).
+
+Cool now that we know that our container is working let's deploy a few resources to our cluster. 
+
+Let's start by creating a namespace for all the work we will be doing this lab, and setting it as the default namespace.
+
+```powershell
+kubectl create ns lab5
+kubectl config set-context --current --namespace=lab5
+```
+
+Next let's start by running a few versions of our application.
+
+```powershell
+kubectl run green --image "$($ACR_NAME).azurecr.io/nginxsample:v1"   
+kubectl run red --image "$($ACR_NAME).azurecr.io/nginxsample:v1" --env="APP_COLOR=Red" --env="APP_MESSAGE=Hey Ho Let's Go!"
+kubectl run blue --image "$($ACR_NAME).azurecr.io/nginxsample:v1" --env="APP_COLOR=Blue" --env="APP_MESSAGE=Why so blue :("
+```
+
+If you run the following command to inspect our blue Pod.
+
+```powershell
+kubectl describe  po blue
+```
+![Pod IP](images/pod_ip.png)
+
+You should be able to find an IP address, this is the Pods IP address and currently within the cluster virtual network you can access the blue application on this IP address. Let's try this out by using busybox ro curl the IP address from within the cluster.
+
+```powershell
+kubectl run busybox --image busybox -i --rm --restart=Never -- wget -qO- <BLUE_POD_IP>
+```
+
+This is great but  Pods are ephemeral, so enter `Services`. You can read more about this [here](https://kubernetes.io/docs/concepts/services-networking/service/#motivation) 
+
+Lets add some more resources to our namespace by creating a deployment and a service to expose the deployment.
+
+deployment.yaml
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: orange
+  name: orange
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: orange
+  strategy: {}
+  template:
+    metadata:
+      labels:
+        app: orange
+    spec:
+      containers:
+      - image: arcbc5524.azurecr.io/nginxsample:v1
+        name: nginxsample
+        env:
+        - name: APP_COLOR
+          value: Orange
+        - name: APP_MESSAGE
+          value: Hup Holland Hup!    
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orange
+spec:
+  selector:
+    app: orange
+  ports:
+    - protocol: TCP
+      port: 80
+```
+
+Lets first explore the Pods we have running and their IP addresses.
+
+```powershell
+kubectl describe po | Select-String ^Name:,^Status:,^IP: 
+```
+Cool now let's have a look at our orange service.
+
+```powershell
+kubectl describe service orange 
+```
+
+The service has it's own "stable" IP address but also has an endpoints property with the IP addresses of the "orange" pods.
+
+![Service Ips](images/service_ips.png)
+
+Apart from that Azure Kubernetes Services also has a dns server running which allows us to access the Pods using the servicename with the namespace name, or just the servicename if you are in the same namespace. 
+
+Kubernetes also ensures that you have environment variables available that can let you know where to access a particular service. 
+
+Let's run busybox in interactive mode and inspect a few more items in the cluster.
+
+```powershell
+kubectl run busybox --image busybox -i --tty --rm --restart=Never -- sh
+```
+
+Once we have entered the busybox shell in iteractive mode we can inspect the environment variables and also do a name server lookup for our service.
+
+
+```sh
+printenv
+nslookup orange
+wget -qO- orange
+```
+Cool so from within the cluster if we use a Service we can use the service name to communicate with the backend applications.
+
+Earlier in this workshop we already created services to expose our workloads. We did this by creating a Service of type LoadBalancer.  
+
+From the [docs](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)   
+> LoadBalancer: Exposes the Service externally using a cloud provider's load balancer. NodePort and ClusterIP Services, to which the external load balancer routes, are automatically created.
+
+
+You can read more about Services [here](https://kubernetes.io/docs/concepts/services-networking/service/)
+
+Lets finish this section on Services by creating a Service that will target our green, blue, and red Pods.
+
+We will start by adding a label to our Pods.
+
+```powershell
+kubectl label po blue app=rainbow 
+kubectl label po red app=rainbow 
+kubectl label po green app=rainbow 
+```
+
+Now lets create the rainbow Service,
+
+service.yaml
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: rainbow
+spec:
+  type: LoadBalancer
+  selector:
+    app: rainbow
+  ports:
+    - protocol: TCP
+      port: 80
+```
+
+```powershell
+kubectl apply -f service.yaml
+kubectl get service rainbow -w
+```
+
+One you have an IP address you can run the follwing commands several times to see the responses changing from Blue to Green to Red.
+
+```powershell
+curl -s <rainbow-ip> | Select-String background-color:
+```
+
+## 2. Exposing workloads with Application Gateway using Ingresses
+
+In [Lab 1](../lab1-environment-setup/LAB.md) when we set up our environment we also created an [Application Gateway](https://docs.microsoft.com/en-us/azure/application-gateway/overview) and we added [Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) resources to our cluster so we can configure application gateway listeners and routing rules to our workloads.
+
+For the next exercises we will need a wildcard ssl certficate, and we will need to configure wildcard DNS Record for the same domain to point to the IP address of your application gateway. Beloware instruction on how to do this with Azure DNS.
+
+First find the IP address of your Application Gateway.
+
+![Application Gateway IP address](images\agw_ip.png)
+
+Next in Azure DNS set up an A Record to point to the Application Gateway IP address.
+
+![DNS Zone Record](images\dns_record.png)
+
+You can set up the SSL certificate by following the instructions [here](https://github.com/Ibis-Software/AksKickStarters#add-ssl-certificates-from-keyvault)
+
+If everything is set up ok you should be able to navigate to any subdomain of you domain and end up on the default nginx page.
 
 
 
 
 
 
-## 2. Exposing workloads with Application Gateway using `Ingresses`
+
+
+
+
+
 
 
 
