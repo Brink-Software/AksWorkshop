@@ -438,7 +438,7 @@ You can read more about Kubernetes Ingress [here](https://kubernetes.io/docs/con
 Cool let's clean up and move on to the next Lab.
 
 ```powershell
-kubectl delete ns labs
+kubectl delete ns lab5
 kubectl config set-context --current --namespace=default
 ```
 
