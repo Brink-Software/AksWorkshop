@@ -435,6 +435,8 @@ $GATEWAY_NAME= az network application-gateway list --query "[0].name" -otsv
 $GROUP_NAME= az network application-gateway list --query "[0].resourceGroup" -otsv
 ```
 
+Next run the following commands to inspect the Application Gateway configuration.  
+
 ```powershell
 az network application-gateway http-listener list -g $GROUP_NAME --gateway-name $GATEWAY_NAME  --query "[].{name:name,host:hostNames[0] }" -otable
 az network application-gateway rules list -g $GROUP_NAME --gateway-name $GATEWAY_NAME -ojsonc
