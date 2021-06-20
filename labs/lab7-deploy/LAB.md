@@ -18,7 +18,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 helm install wordpress --create-namespace --dry-run  -n wordpress bitnami/wordpress
 ```
 
-This should print out all the resources this chart will create and then the instruction to access the wordpress installation one the deployment is done. 
+This should print out all the resources this chart will create, followed by the instruction on how to access the wordpress installation one the deployment is done.
 
 Let's deploy the Chart.
 
@@ -30,11 +30,12 @@ Once you have inspected the installed resources you can delete the installation 
 
 ```powershell
 helm delete wordpress -n wordpress
+kubectl delete ns wordpress
 ```
 
 We can also use Helm charts to define our own applications so can we dynamically apply configuration and deploy our applications.
 
-Go through the following sections of the Chart Template Guide of the helm [docs](https://helm.sh/docs/chart_template_guide/getting_started/)
+Go through the following sections of the Chart Template Guide over at the helm [docs](https://helm.sh/docs/chart_template_guide/getting_started/)
 
 - Getting Started
 - Built-in Objects
