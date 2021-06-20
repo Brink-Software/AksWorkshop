@@ -411,7 +411,7 @@ spec:
               number: 80                
 ```
 
-Cool, once you have deployed this file you should now have the following configuration.
+Once you have deployed this file you should have the following configuration.
 
 ```text
 <rainbow.your-domain> => green
@@ -436,7 +436,7 @@ kubectl describe svc orange | Select-String Endpoints:
 
 You can read more about Kubernetes Ingress [here](https://kubernetes.io/docs/concepts/services-networking/ingress/), and you can read more about the Application Gateway Ingress Controller [here](https://azure.github.io/application-gateway-kubernetes-ingress/)
 
-Cool let's clean up and move on to the next Lab.
+Let's clean up and move on to the next Lab.
 
 ```powershell
 kubectl delete ns lab5
