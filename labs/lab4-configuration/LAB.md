@@ -438,7 +438,10 @@ spec:
         cpu: "500m"
 ```
 
+You can also place resource request and limits on a Namespace using the `ResourceQuota` object, you can read more about this [here](https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/quota-memory-cpu-namespace/#create-a-resourcequota)
+
 You can find out more about managing resources for containers [here](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/).
+
 
 ## 5. Configuring Liveness, Readiness, Startup probes and Pod lifecycle
 
