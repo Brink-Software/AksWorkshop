@@ -1,11 +1,13 @@
 # Lab 6 Storing and preserving application data with volumes
 
+Let's start by creating a namespace and setting it as default for this lab.
+
 ```powershell
 kubectl create ns lab6
 kubectl config set-context --current --namespace=lab6
 ```
 
-Pods are ephemaral and so any data that stored in the Pod gets lost once the Pod deleted, or crashes. Let's demonstrate this.
+Pods are ephemaral and so any data that is stored in the Pod gets lost once the Pod is deleted, or crashes. Let's demonstrate this.
 
 First create a Pod based on the `neo4j` image and expose it.
 
@@ -15,7 +17,7 @@ kubectl expose pod neo4j --port=7474,7687 --type=LoadBalancer
 kubectl get svc neo4j -w
 ```
 
-One we have an IP address we can navigate to it on port `7474` and enter the default neo4j username and password.
+Once we have an IP address we can navigate to it on port `7474` and enter the default neo4j username and password.
 
 ![Neo4j setup](images/neo4j_setup_1.png)
 
@@ -42,9 +44,7 @@ kubectl delete po/neo4j
 kubectl run neo4j --image neo4j 
 ```
 
-If you now refresh the browser you will be confronted with the login screen.
-
-Normally our application are stateless and this doesn't matter but there might be a situation where you want to be able to persist the data over Pod restarts and crashes. Kubernetes has various resources to help with this.
+If you now refresh the browser you will be confronted with the login screen. Normally our application are stateless and this doesn't matter but there might be a situation where you want to be able to persist the data over Pod restarts and crashes. Kubernetes has various resources to help with this.
 
 Azure Kubernetes Services comes preconfigured with a set of `StorageClasses`.
 
@@ -54,7 +54,7 @@ kubectl describe storageclasses default
 kubectl describe storageclasses default
 ```
 
-If you inpect the output from the commands above you will see that the default StorageClass uses  `storageaccounttype=StandardSSD_LRS` whereas the managed-premium uses `storageaccounttype=Premium_LRS`. You can find our more about this storage classes [here](https://docs.microsoft.com/en-us/azure/aks/concepts-storage#storage-classes).
+If you inspect the output from the commands above you will see that the default StorageClass uses  `storageaccounttype=StandardSSD_LRS` whereas the managed-premium uses `storageaccounttype=Premium_LRS`. You can find our more about these Storage classes [here](https://docs.microsoft.com/en-us/azure/aks/concepts-storage#storage-classes).
 
 Let's use the managed-premium storage class to create a PersistenVolumeClaim. With this claim we are asking Azure to provision an Azure Premium Managed Disk. This disk will be created when the first Pod requests it. We can then use this PersistentVolumeClaim in our Pod.
 
@@ -101,13 +101,13 @@ kubectl delete po/neo4j
 kubectl apply -f pvc.yaml -f pod.yaml
 ```
 
-If you now retry the steps above, and delete and reapply the `pod.yaml` file you initial data will still be availble. We can also inspect the `PersistentVolume` that was created as a result of our actions.
+If you now retry the steps above, and delete and reapply the `pod.yaml` file you initial data will still be availble. We can also inspect the `PersistentVolume` that was created as a result of our actions, and be able to locate the Azure Disk resource where our data is stored.
 
 ```powershell
 kubectl describe pv
 ```
 
-You can find out more about the Storage options in Azure Kubernetes Services [here](https://docs.microsoft.com/en-us/azure/aks/concepts-storage).
+You can also use [ConfigMaps](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#add-configmap-data-to-a-volume) and [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/#using-secrets-as-files-from-a-pod) as volumes. You can find out more about the Storage options in Azure Kubernetes Services [here](https://docs.microsoft.com/en-us/azure/aks/concepts-storage).
 
 Let's clean up our resources and move on to Lab 7.
 
