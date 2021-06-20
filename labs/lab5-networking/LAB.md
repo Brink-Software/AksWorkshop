@@ -423,16 +423,31 @@ Once you have deployed this file you should have the following configuration.
 
 Navigate to your website and test out the various paths.
 
-<!-- Before we clean up let's inspect the application gateway, looking at how the orange Pods are configured. 
+<!-- markdownlint-disable MD033 -->
+<details>
+  <summary style="font-size:24px; font-weight:bold;">&#127873; Bonus</summary>
+
+<ul>
+Before we clean up let's inspect the application gateway, looking at how the orange Pods are configured. Asuming you only have one Application Gateway we can use the following queries to get the gateway and resource group name.
 
 ```powershell
 $GATEWAY_NAME= az network application-gateway list --query "[0].name" -otsv
 $GROUP_NAME= az network application-gateway list --query "[0].resourceGroup" -otsv
+```
+
+```powershell
 az network application-gateway http-listener list -g $GROUP_NAME --gateway-name $GATEWAY_NAME  --query "[].{name:name,host:hostNames[0] }" -otable
+az network application-gateway rules list -g $GROUP_NAME --gateway-name $GATEWAY_NAME -ojsonc
 z network application-gateway url-path-map list -g $GROUP_NAME --gateway-name $GATEWAY_NAME --query "[0]" -ojson | Select-String "pool-lab5-orange-80-bp-80" -Context 2,19
 az network application-gateway address-pool show -n pool-lab5-orange-80-bp-80 -g $GROUP_NAME --gateway-name $GATEWAY_NAME --query "backendAddresses[].ipAddress"  -ojsonc
 kubectl describe svc orange | Select-String Endpoints:
-``` -->
+```
+
+If you inspect the output from the queries above you should get a pretty good idea of how Application Gateway maps the listener to the Pods.
+
+</ul>
+</details>
+<!-- markdownlint-enable MD033 -->
 
 You can read more about Kubernetes Ingress [here](https://kubernetes.io/docs/concepts/services-networking/ingress/), and you can read more about the Application Gateway Ingress Controller [here](https://azure.github.io/application-gateway-kubernetes-ingress/)
 
