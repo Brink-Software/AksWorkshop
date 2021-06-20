@@ -1,11 +1,10 @@
-# Lab 4. Configuring your kubernetes applications 
+# Lab 4. Configuring your kubernetes applications
 
-### In this lab we will experiment with the different ways change the behavior of your application.
+### In this lab we will experiment with the different ways change the behavior of your application
 
-## 1. Configuring your application using environment variables.
+## 1. Configuring your application using environment variables
 
 In 2011 the developers at [Heroku](https://www.heroku.com/) presented a methodology for building software-as-a-service application [The Twelve-Factor App](https://12factor.net/) methodology. The 3rd of these twelve factors is to store config in the environment you can read more about this [here](https://12factor.net/config). Over the following exercises we will be looking at different ways to do this with kubernetes.
-
 
 Let's start by creating a namespace for all the work we will be doing this lab, and setting it as the default namespace.
 
@@ -13,6 +12,7 @@ Let's start by creating a namespace for all the work we will be doing this lab, 
 kubectl create namespace lab4 
 kubectl config set-context --current --namespace=lab4
 ```
+
 Then let's create an application to display the current configuration.
 
 ```powershell
@@ -57,6 +57,7 @@ namespace Lab4.Pages
     }
 }
 ```
+
 Open the `Index.cshtml` file and replace the content with the following.
 
 ```cshtml
@@ -112,7 +113,7 @@ az acr build --registry $ACR_NAME --image configwebapp:v1 .
 docker run --rm -it -p 8082:80 "$($ACR_NAME).azurecr.io/configwebapp:v1" 
 ```
 
-We can now run our application in kubernetes let's prepare some files so we can create our resources using declarative object configuration. 
+We can now run our application in kubernetes let's prepare some files so we can create our resources using declarative object configuration.
 
 Create a folder named resources and add the following files.
 
@@ -184,6 +185,7 @@ kubectl explain service.spec.selector
 kubectl explain pod.spec.containers.env
 kubectl explain pod.spec.containers.env --recursive
 ```
+
 </ul>
 </details>
 </p>
@@ -205,11 +207,11 @@ kubectl apply -f resources/
 
 If you refresh the app you should now see your newly configured variables.
 
-We can also use `ConfigMap`  resources to configure our applications. Take the time to read, understand and try some of the exercises [here](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/). 
+We can also use `ConfigMap`  resources to configure our applications. Take the time to read, understand and try some of the exercises [here](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/).
 
 ## 2. Configuring sensitive information using `Secrets`
 
-Kubernetes also has `Secret` resources that allow you to store sensitive information. Kubernetes does treat secrets differently however secrets are stored as unencrypted base64-encoded strings and as such should not be considered secure.   
+Kubernetes also has `Secret` resources that allow you to store sensitive information. Kubernetes does treat secrets differently however secrets are stored as unencrypted base64-encoded strings and as such should not be considered secure.
 
 You can read more about Secrets [here](https://kubernetes.io/docs/concepts/configuration/secret/#details).
 
@@ -252,7 +254,7 @@ $SCOPE=az group show -g rg-lab4 --query id -otsv
 az role assignment create --role "Managed Identity Operator" --assignee $ID --scope $SCOPE
 ```
 
-Create the key vault, add some secrets and ensure that our newly created managed identity can get and list secrets. 
+Create the key vault, add some secrets and ensure that our newly created managed identity can get and list secrets.
 
 ```powershell
 az keyvault create --name <kv-lab4-your-name> -g rg-lab4 -l westeurope
@@ -325,7 +327,6 @@ First let's add the following file to the resources folder, replace the `<client
 az identity show  -n id-lab4 -g rg-lab4 --query '{ clientId:clientId,   resourceID:id }' -ojsonc
 ```
 
-
 identity.yaml
 
 ```text
@@ -387,7 +388,7 @@ We can also examine the resources to get insight into what exactly happened.
  kubectl get AzureAssignedIdentity
  kubectl get Events
  ```
- 
+
 You can find out more about AAD Pod Identity [here](https://azure.github.io/aad-pod-identity/docs/).
 
 ## 4. Preventing resource starvation with resource request and limits
@@ -407,7 +408,6 @@ From the [docs](https://kubernetes.io/docs/concepts/configuration/manage-resourc
 </details>
 </p>
 <!-- markdownlint-enable MD033 -->
-
 
 We can examine these properties using the `kubectl explain` command.
 
@@ -521,7 +521,7 @@ Doing this does not prevent the Pod from running on an inappropriate node, this 
 Below are also links to documentation on other ways we can manage Pod Placement:
 
 - [Node affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
-- [Inter-pod affinity and anti-affinity ](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity)
+- [Inter-pod affinity and anti-affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity)
 - [nodeName](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodename)
 
 ## 7. Configuring apiserver access with Service Accounts and RBAC
@@ -598,6 +598,7 @@ kubectl run kubectl --image bitnami/kubectl -i --rm --restart=Never -- get po --
 ```
 
 Output:
+
 ```text
 Error from server (Forbidden): pods is forbidden: User "system:serviceaccount:lab4:default" cannot list resource "pods" in API group "" at the cluster scope
 ```
@@ -621,4 +622,4 @@ kubectl delete ns lab4
 kubectl delete clusterrolebinding lab4-rolebinding
 ```
 
-[:arrow_backward: previous](../lab3-workloads/LAB.md)  [next :arrow_forward:](../lab5-networking/LAB.md)
+[:arrow_backward: previous](../lab3-workloads/LAB.md)  [next :arrow_forward:](../lab5-networking/LAB.md
