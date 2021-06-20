@@ -1,4 +1,4 @@
-# Lab 6
+# Lab 6 Storing and preserving application data with volumes
 
 ```powershell
 kubectl run neo4j --image neo4j 
