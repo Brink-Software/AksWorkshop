@@ -37,13 +37,13 @@ We can also use Helm charts to define our own applications so can we dynamically
 
 Go through the following sections of the Chart Template Guide over at the helm [docs](https://helm.sh/docs/chart_template_guide/getting_started/)
 
-- Getting Started
-- Built-in Objects
-- Values Files
-- Template Functions and Pipelines
-- Flow Control
-- Variables
-- Debugging Templates
+- [Getting Started](https://helm.sh/docs/chart_template_guide/getting_started/)
+- [Built-in Objects](https://helm.sh/docs/chart_template_guide/builtin_objects/)
+- [Values Files](https://helm.sh/docs/chart_template_guide/values_files/)
+- [Template Functions and Pipelines](https://helm.sh/docs/chart_template_guide/functions_and_pipelines/)
+- [Flow Control](https://helm.sh/docs/chart_template_guide/control_structures/)
+- [Variables](https://helm.sh/docs/chart_template_guide/variables/)
+- [Debugging Templates](https://helm.sh/docs/chart_template_guide/debugging/)
 
 ## 2. Deploying an application using Helm and Azure DevOps
 
