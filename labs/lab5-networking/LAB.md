@@ -3,7 +3,8 @@
 ## 1. Exposing workloads using Services
 
 Let's start of by creating anaother application for this lab.
-First lets create an index.html file in a lab5 folder with the following content.
+
+First create an index.html file in a lab5 folder with the following content.
 
 index.html
 
@@ -39,7 +40,7 @@ index.html
 </html>
 ```
 
-Next let's add a script file entrypoint.sh that will overwrite `APP_COLOR` and `APP_MESSAGE` in the index.html file values with environment variables with the same name.
+Next let's add a script file entrypoint.sh that will overwrite `APP_COLOR` and `APP_MESSAGE` in the index.html file values with environment variables.
 
 entrypoint.sh
 
@@ -129,7 +130,7 @@ kubectl create ns lab5
 kubectl config set-context --current --namespace=lab5
 ```
 
-Next let's start by running a few versions of our application.
+Next let's run a few versions of our application.
 
 ```powershell
 kubectl run green --image "$($ACR_NAME).azurecr.io/nginxsample:v1"   
@@ -143,17 +144,17 @@ If you run the following command to inspect our blue Pod.
 kubectl describe  po blue
 ```
 
-![Pod IP](images/pod_ip.png)
+You should be able to find an IP address, this is the Pods IP address and currently within the cluster virtual network you can access the blue application on this IP address. Let's try this out by using busybox, and using curl to issue a get request on the IP address from within the cluster.
 
-You should be able to find an IP address, this is the Pods IP address and currently within the cluster virtual network you can access the blue application on this IP address. Let's try this out by using busybox ro curl the IP address from within the cluster.
+![Pod IP](images/pod_ip.png)
 
 ```powershell
 kubectl run busybox --image busybox -i --rm --restart=Never -- wget -qO- <BLUE_POD_IP>
 ```
 
-This is great but  Pods are ephemeral, so enter `Services`. You can read more about this [here](https://kubernetes.io/docs/concepts/services-networking/service/#motivation)
+This is great, we can access the Pod with it's IP addres, but  Pods are ephemeral, and therefore attached IP address in not stable. This is where `Services` come in, they give us a stable wat to access the underlying Pods. You can read more about the motivation behind Services [here](https://kubernetes.io/docs/concepts/services-networking/service/#motivation)
 
-Lets add some more resources to our namespace by creating a deployment and a service to expose the deployment.
+Let's add some more resources to our namespace by creating a deployment and a service to expose the deployment.
 
 deployment.yaml
 
@@ -196,7 +197,7 @@ spec:
       port: 80
 ```
 
-Lets first explore the Pods we have running and their IP addresses.
+Let's first explore the Pods we have running and their IP addresses.
 
 ```powershell
 kubectl describe po | Select-String ^Name:,^Status:,^IP: 
@@ -237,8 +238,6 @@ Earlier in this workshop we already created services to expose our workloads. We
 From the [docs](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
 > LoadBalancer: Exposes the Service externally using a cloud provider's load balancer. NodePort and ClusterIP Services, to which the external load balancer routes, are automatically created.
 
-You can read more about Services [here](https://kubernetes.io/docs/concepts/services-networking/service/)
-
 Lets finish this section on Services by creating a Service that will target our green, blue, and red Pods.
 
 We will start by adding a label to our Pods.
@@ -278,9 +277,11 @@ One you have an IP address you can run the follwing commands several times to se
 curl -s <rainbow-ip> | Select-String background-color:
 ```
 
+You can read more about Services [here](https://kubernetes.io/docs/concepts/services-networking/service/)
+
 ## 2. Exposing workloads with Application Gateway using Ingresses
 
-In [Lab 1](../lab1-environment-setup/LAB.md) when we set up our environment we also created an [Application Gateway](https://docs.microsoft.com/en-us/azure/application-gateway/overview) and we added [Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) resources to our cluster so we can configure application gateway listeners and routing rules to expose our workloads. We also added a default rule that captures all incoming traffic and directs it to Pods backed by the `default-http-backend` Deployment.
+In [Lab 1](../lab1-environment-setup/LAB.md) when we set up our environment we also created an [Application Gateway](https://docs.microsoft.com/en-us/azure/application-gateway/overview), and we added [Ingress Controller](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/) resources to our cluster so we can configure application gateway listeners and routing rules to expose our workloads. We also added a default rule that captures all incoming traffic and directs it to the `default-http-backend` Pods.
 
 ```powershell
 kubectl describe deployment -n default 
@@ -294,19 +295,19 @@ env:KUBE_EDITOR='code --wait'
 kubectl edit deployment default-http-backend -n dafault
 ```
 
-This should open up a spec of the deployment in Visual Studio Code. Edit the image and add environment variables for `APP_COLOR` and `APP_MESSAGE`, save and close the file to update the Deployment resource.
+This should open up the Deployment resource in Visual Studio Code. Edit the image and add environment variables for `APP_COLOR` and `APP_MESSAGE`, save and close the file to update the Deployment resource.
 
 ![Default backend config](images/default_backend.png)
 
-For the next exercises we will need a wildcard ssl certficate, and we will need to configure wildcard DNS Record for the same domain to point to the IP address of your application gateway. Beloware instruction on how to do this with Azure DNS.
+For the next exercises we will need a wildcard ssl certficate, and we will need to configure a wildcard DNS Record for the same domain to point to the IP address of your application gateway. Below are instruction on how to do this with Azure DNS.
 
 First find the IP address of your Application Gateway.
 
-![Application Gateway IP address](images\agw_ip.png)
+![Application Gateway IP address](images/agw_ip.png)
 
 Next in Azure DNS set up an A Record to point to the Application Gateway IP address.
 
-![DNS Zone Record](images\dns_record.png)
+![DNS Zone Record](images/dns_record.png)
 
 You can set up the SSL certificate by following the instructions [here](https://github.com/Ibis-Software/AksKickStarters#add-ssl-certificates-from-keyvault). Make sure to make a note of your `<ssl-certificate-name>` for later.
 
@@ -410,7 +411,7 @@ spec:
               number: 80                
 ```
 
-Cool you should now have the following configuration.
+Cool, once you have deployed this file you should now have the following configuration.
 
 ```text
 <rainbow.your-domain> => green
