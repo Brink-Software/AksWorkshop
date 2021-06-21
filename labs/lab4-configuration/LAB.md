@@ -145,6 +145,21 @@ spec:
 
 ```
 
+<!-- markdownlint-disable MD033 -->
+<p>
+<details>
+  <summary>&#x261d; &#xfe0f; Hint: update the image name </summary>
+<ul>  
+  <p>In the deployment file, replace `<acrname>` with the actual azure container repository name!</p>
+
+```powershell
+  Invoke-RestMethod -Uri $api/api | ConvertTo-Json | jq -C
+```
+</ul>
+</details>
+</p>
+<!-- markdownlint-enable MD033 -->
+
 service.yaml
 
 ```text
