@@ -321,7 +321,7 @@ Let's rebuild the container with a new `v2` tag. We can test this locally but it
 az acr build --registry $ACR_NAME --image configwebapp:v2 .
 ```
 
-We can now add the identity resources and configure the application and re-apply the resources.
+We can now add the identity resources and configure the application and reapply the resources.
 
 First let's add the following file to the resources folder. Replace the `<clientId>` and `<resourceID>` fields with the values from the following command:
 
@@ -369,7 +369,7 @@ template:
         value: https://<kv-lab4-your-name>.vault.azure.net/
 ```
 
-Cool, we can re-apply the resources folder and watch the magic happen.
+Cool, we can reapply the resources folder and watch the magic happen.
 
 ```powershell
 kubectl apply -f resources/
@@ -589,7 +589,7 @@ kubectl get clusterrolebindings
 kubectl describe clusterrolebindings aad-pod-identity-mic
 ```
 
-Let's create a `RoleBinding` for our default service account for the view `ClusterRole`, and re-run the previous command.
+Let's create a `RoleBinding` for our default service account for the view `ClusterRole`, and rerun the previous command.
 
 ```powershell
 kubectl create rolebinding lab4-rolebinding --serviceaccount lab4:default --clusterrole view
