@@ -4,7 +4,7 @@
 
 ## 1. Configuring your application using environment variables
 
-In 2011 the developers at [Heroku](https://www.heroku.com/) presented a methodology for building software-as-a-service application [The Twelve-Factor App](https://12factor.net/) methodology. The 3rd of these twelve factors is to store config in the environment you can read more about this [here](https://12factor.net/config). Over the following exercises we will be looking at different ways to do this with kubernetes.
+In 2011 the developers at [Heroku](https://www.heroku.com/) presented a methodology for building software-as-a-service applications, called the [The Twelve-Factor App](https://12factor.net/) methodology. The 3rd of these twelve factors is to store config in the environment. You can read more about this [here](https://12factor.net/config). Over the following exercises we will be looking at different ways to do this with kubernetes.
 
 Let's start by creating a namespace for all the work we will be doing this lab, and setting it as the default namespace.
 
@@ -106,16 +106,16 @@ COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Lab4.dll"]
 ```
 
-Cool now let's build run and check the application.
+Cool now let's build, run and inspect the application.
 
 ```powershell
 az acr build --registry $ACR_NAME --image configwebapp:v1 .
 docker run --rm -it -p 8082:80 "$($ACR_NAME).azurecr.io/configwebapp:v1" 
 ```
 
-We can now run our application in kubernetes let's prepare some files so we can create our resources using declarative object configuration.
+We can now run our application in kubernetes. Let's prepare some files so we can create our resources using declarative object configuration.
 
-Create a folder named resources and add the following files.
+Create a folder named `resources` and add the following files.
 
 deployment.yaml:
 
@@ -176,7 +176,7 @@ We can now start adding our own configuration values.
 <details>
   <summary>&#x2757; Note </summary>
 <ul>  
-  <p>We will be adding and changing various properties in our yaml files from now on. If you are curious about what properties you can configure and how, you can use the <code>kubectl explain</code> command. This will give you a description of the entity and any fields it might have. You can navigate down to specific fields, or you can also ask for a recursive explanation. Below are a few commands you can try out.</p>
+  <p>We will be adding and changing various properties in our yaml files from now on. If you are curious about what properties you can configure and how, you can use the <code>kubectl explain</code> command. This will give you a description of the entity and any fields it might have. You can navigate down to specific fields, or you can also ask for a recursive explanation. Below are a few commands you can try.</p>
 
 ```powershell
 kubectl explain pod
@@ -211,7 +211,7 @@ We can also use `ConfigMap`  resources to configure our applications. Take the t
 
 ## 2. Configuring sensitive information using `Secrets`
 
-Kubernetes also has `Secret` resources that allow you to store sensitive information. Kubernetes does treat secrets differently however secrets are stored as unencrypted base64-encoded strings and as such should not be considered secure.
+Kubernetes also has `Secret` resources that allow you to store sensitive information. Kubernetes does treat secrets differently however. Secrets are stored as unencrypted base64-encoded strings and as such should not be considered secure.
 
 You can read more about Secrets [here](https://kubernetes.io/docs/concepts/configuration/secret/#details).
 
@@ -221,7 +221,7 @@ Let's create a `Secret` and expose it to our application. Run the follwing comma
 kubectl create secret generic my-secret --from-literal=SqlConnectionString="Server=myServerAddress;Database=myDataBase;User Id=myUsername;Password=myPassword;" --from-literal=StorageConnectionString="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;"  --dry-run=client -oyaml > .\resources\secrets.yaml
 ```
 
-Now let's add the secrets to our application by adding the following properties to containers field and reapplying the resources folder.
+Now let's add the secrets to our application by adding the the following properties to containers field and reapplying the resources folder.
 
 ```yaml
 envFrom:
@@ -237,7 +237,7 @@ If you refresh the app you should now see your newly configured variables.
 
 ## 3. Beter secrets using managed pod identity to access key vault
 
-There is a beter way to access sensitive data in our application and that is by using [AAD Pod Identity](https://github.com/Azure/aad-pod-identity). When we created our environment in [lab 1](..\lab1-environment-setup\LAB.md) we already set up AAD Pod Identity, over the next few steps we will configure our application to use it to securely access credentials in [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/).
+There is a better way to access sensitive data in our application and that is by using [AAD Pod Identity](https://github.com/Azure/aad-pod-identity). When we created our environment in [lab 1](..\lab1-environment-setup\LAB.md) we already set up AAD Pod Identity. Over the next few steps we will configure our application to use it to securely access credentials in [Azure Key Vault](https://azure.microsoft.com/en-us/services/key-vault/).
 
 Let's start off by creating a user assigned managed identity.
 
@@ -319,9 +319,9 @@ Let's rebuild the container with a new `v2` tag. We can test this locally but it
 az acr build --registry $ACR_NAME --image configwebapp:v2 .
 ```
 
-We can now add the identity resources and configure application and reapply the resources.
+We can now add the identity resources and configure the application and re-apply the resources.
 
-First let's add the following file to the resources folder, replace the `<clientId>` and `<resourceID>` fields with the values from the following command:
+First let's add the following file to the resources folder. Replace the `<clientId>` and `<resourceID>` fields with the values from the following command:
 
 ```powershell
 az identity show  -n id-lab4 -g rg-lab4 --query '{ clientId:clientId,   resourceID:id }' -ojsonc
@@ -367,20 +367,20 @@ template:
         value: https://<kv-lab4-your-name>.vault.azure.net/
 ```
 
-Cool we can reapply the resources forder and watch the magic happen.
+Cool, we can re-apply the resources folder and watch the magic happen.
 
 ```powershell
 kubectl apply -f resources/
 ```
 
-It will take a bit longer for the resources to be provisioned this time, but one everything is up and running you should be able to see the secret you created earlier. You can now add a new secret to to the key vault, add restart the app by deleting the pod. You should then also be able to see the new secret.
+It will take a bit longer for the resources to be provisioned this time, but once everything is up and running you should be able to see the secret you created earlier. You can now add a new secret to the key vault and restart the app by deleting the pod. You should then also be able to see the new secret.
 
 ```powershell
 az keyvault secret set --name MyNewSecret --vault-name <kv-lab4-your-name> --value "MySecretValue"
 kubectl delete po --all
 ```
 
-We can also examine the resources to get insight into what exactly happened.
+We can also examine the resources to get insights into what exactly happened.
 
  ```powershell
  kubectl get AzureIdentity
@@ -393,7 +393,7 @@ You can find out more about AAD Pod Identity [here](https://azure.github.io/aad-
 
 ## 4. Preventing resource starvation with resource request and limits
 
-One of the many benefits of containerized applications is that they can run side by side on a machine with less overhead, this does however mean that a container can potentially use up all the machine resources. To ensure that this does not happen it is a best practice to ensure that you application has resource request and limits  in place.  
+One of the many benefits of containerized applications is that they can run side by side on a machine with less overhead. This does however mean that a container can potentially use up all the machine resources. To ensure that this does not happen it is a best practice to ensure that you application has resource request and limits in place.  
 
 <!-- markdownlint-disable MD033 -->
 <p>
@@ -453,7 +453,7 @@ Kubernetes containers can be configured with the following propes.
 - [Startup](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#when-should-you-use-a-startup-probe), this probe is good for containers that require a long startup periods. This probe can the be configured differently from the Liveness probe.
 - [Readiness](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#when-should-you-use-a-readiness-probe), this probe is used to determine if the Pod is ready to receive traffic through Kubernetes Services.
 
-You can read more about how to configure probes [here](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/)
+You can read more about how to configure probes [here](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/).
 
 ### Pod Lifecycle
 
@@ -521,13 +521,13 @@ kubectl describe po nginx
 
 Doing this does not prevent the Pod from running on an inappropriate node, this can be done by applying a label to the node and defining a [nodeSelector](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector) on the Pod.
 
-Below are also links to documentation on other ways we can manage Pod Placement:
+Below are links to documentation on other ways we can manage Pod Placement:
 
 - [Node affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity)
 - [Inter-pod affinity and anti-affinity](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity)
 - [nodeName](https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodename)
 
-## 7. Configuring apiserver access with Service Accounts and RBAC
+## 7. Configuring api server access with Service Accounts and RBAC
 
 In lab 2 we discovered various ways of accessing the cluster, locally this is possible because of our Kubernetes config file. We can also examine the Kubernetes resources from a Pod running in the cluster. By default all Pods have a service account attached to them. Let's have a look.
 
@@ -538,7 +538,7 @@ $SECRET_NAME = kubectl get sa default -o jsonpath="{.secrets..name}"
 kubectl describe secret $SECRET_NAME
 ```
 
-If we examine the output from these commands we can see that the nginx Pod has an Service Account 'default' and that that account has a secret that contains the properties: `namespace`  `ca.cert` and `token`. We can also copy the token and navigate to [https://jwt.io/](https://jwt.io/)  and examine it futher.
+If we examine the output from these commands we can see that the nginx Pod has an Service Account 'default' and that the account has a secret that contains the properties: `namespace`  `ca.cert` and `token`. We can also copy the token and navigate to [https://jwt.io/](https://jwt.io/)  and examine it futher.
 
 ```json
 {
@@ -551,13 +551,13 @@ If we examine the output from these commands we can see that the nginx Pod has a
 }
 ```
 
-Cool so we have a token let's query the api-server from a Pod. The follwing command will start the pod in interactive mode run the command `kubectl version` and the exit and delete the Pod.
+Cool, so we have a token. Let's query the api server from a Pod. The following command will start the pod in the interactive mode. Run the command `kubectl version` and then exit and delete the Pod.
 
 ```powershell
 kubectl run kubectl --image bitnami/kubectl -i --rm --restart=Never -- version
 ```
 
-Now let's try and querying Pods.
+Now let's try querying Pods.
 
 ```powershell
 kubectl run kubectl --image bitnami/kubectl -i --rm --restart=Never -- get po
@@ -569,7 +569,7 @@ Output:
 Error from server (Forbidden): pods is forbidden: User "system:serviceaccount:lab4:default" cannot list resource "pods" in API group "" in the namespace "lab4"
 ```
 
-It appears that we don't have the right to list pods, this is because by default service accounts do not have permissions. We can give service account permission by using `Role` or `ClusterRole` resources to define the permissions and then use `RoleBinding` or `ClusterRoleBinding` resources assign permissions to the service account.
+It appears that we don't have the right to list pods, this is because by default service accounts do not have sufficient permissions. We can give a service account permissions by using `Role` or `ClusterRole` resources to define the permissions and then use `RoleBinding` or `ClusterRoleBinding` resources to assign permissions to the service account.
 
 Run the following commands to inspect the already existing `ClusterRoles`.
 
@@ -587,14 +587,14 @@ kubectl get clusterrolebindings
 kubectl describe clusterrolebindings aad-pod-identity-mic
 ```
 
-Let's create a `RoleBinding` for our default service account for the view `ClusterRole`, and rerun the previous command.
+Let's create a `RoleBinding` for our default service account for the view `ClusterRole`, and re-run the previous command.
 
 ```powershell
 kubectl create rolebinding lab4-rolebinding --serviceaccount lab4:default --clusterrole view
 kubectl run kubectl --image bitnami/kubectl -i --rm --restart=Never -- get po
 ```
 
-Cool we now have permission to view the pods, let's try and get all the pods from all the namespaces.
+Cool, we now have permission to view the pods. Let's try and get all the pods from all the namespaces.
 
 ```powershell
 kubectl run kubectl --image bitnami/kubectl -i --rm --restart=Never -- get po --all-namespaces
@@ -618,7 +618,7 @@ You can read more about RBAC in Kubernetes [here](https://kubernetes.io/docs/ref
 
 ## 8. Cleanup
 
-Awesome Lab 4 is done let's clean up our resources.
+Awesome Lab 4 is done. Let's clean up our resources.
 
 ```powershell
 kubectl delete ns lab4
