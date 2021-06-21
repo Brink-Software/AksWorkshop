@@ -7,7 +7,7 @@ kubectl create ns lab6
 kubectl config set-context --current --namespace=lab6
 ```
 
-Pods are ephemaral and so any data that is stored in the Pod gets lost once the Pod is deleted, or crashes. Let's demonstrate this.
+Pods are ephemeral and so any data that is stored in the Pod gets lost once the Pod is deleted, or crashes. Let's demonstrate this.
 
 First create a Pod based on the `neo4j` image and expose it.
 
@@ -44,14 +44,14 @@ kubectl delete po/neo4j
 kubectl run neo4j --image neo4j 
 ```
 
-If you now refresh the browser you will be confronted with the login screen. Normally our application are stateless and this doesn't matter but there might be a situation where you want to be able to persist the data over Pod restarts and crashes. Kubernetes has various resources to help with this.
+If you now refresh the browser you will be confronted with the login screen. Normally our applications are stateless and this doesn't matter but there might be a situation where you want to be able to persist data over Pod restarts and crashes. Kubernetes has various resources to help with this.
 
 Azure Kubernetes Services comes preconfigured with a set of `StorageClasses`.
 
 ```powershell
 kubectl get storageclasses  
 kubectl describe storageclasses default
-kubectl describe storageclasses default
+kubectl describe storageclasses managed-premium
 ```
 
 If you inspect the output from the commands above you will see that the default StorageClass uses  `storageaccounttype=StandardSSD_LRS` whereas the managed-premium uses `storageaccounttype=Premium_LRS`. You can find our more about these Storage classes [here](https://docs.microsoft.com/en-us/azure/aks/concepts-storage#storage-classes).
