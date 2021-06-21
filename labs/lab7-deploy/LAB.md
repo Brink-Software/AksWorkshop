@@ -51,4 +51,6 @@ We will spend the rest of this lab trying to deploy a sample application to Kube
 
 These environments need to to have their own resources and should be configured seperately.
 
+The sample application to deploy can be found [here](./src). By modifying an environment variable called `WelcomeMessage`, you can change the welcome message displayed at the website.
+
 [:arrow_backward: previous](../lab6-volumes/LAB.md)  [next :arrow_forward:](../lab8-troubleshooting/LAB.md)
