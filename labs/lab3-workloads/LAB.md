@@ -213,7 +213,7 @@ kubectl describe replicasets/samplewebapp
 
 
 
-Lets expose the pods again but this time by exposing the `ReplicaSet`
+Let's expose the pods again but this time by exposing the `ReplicaSet`
 
 ```powershell
 kubectl expose replicaset/samplewebapp --port 80 --type LoadBalancer

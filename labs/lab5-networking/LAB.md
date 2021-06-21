@@ -238,7 +238,7 @@ Earlier in this workshop we already created services to expose our workloads. We
 From the [docs](https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services-service-types)
 > LoadBalancer: Exposes the Service externally using a cloud provider's load balancer. NodePort and ClusterIP Services, to which the external load balancer routes, are automatically created.
 
-Lets finish this section on Services by creating a Service that will target our green, blue, and red Pods.
+Let's finish this section on Services by creating a Service that will target our green, blue, and red Pods.
 
 We will start by adding a label to our Pods.
 
@@ -248,7 +248,7 @@ kubectl label po red app=rainbow
 kubectl label po green app=rainbow 
 ```
 
-Now lets create the rainbow Service,
+Now let's create the rainbow Service,
 
 service.yaml
 
@@ -321,7 +321,7 @@ Ok let's now try and expose our green Pod on it's own subdomain. First we will n
 kubectl expose po/green --port 80
 ```
 
-Now lets create an `Ingress` resource to expose our green Pod to the internet. 
+Now let's create an `Ingress` resource to expose our green Pod to the internet. 
 
 ingress.yaml
 
@@ -363,7 +363,7 @@ If you then reapply the file you should then only be able to access your site ov
 
 Follow the steps above to also expose you `blue` and `red` Pods.
 
-Cool lets do one more this time we will create `Ingress` resource to expose all our Pods on different paths.
+Cool let's do one more this time we will create `Ingress` resource to expose all our Pods on different paths.
 
 rainbow.ingress.yaml
 

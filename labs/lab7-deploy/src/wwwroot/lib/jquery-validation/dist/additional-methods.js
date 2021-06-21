@@ -938,7 +938,7 @@ $.validator.addMethod( "postcodeUK", function( value, element ) {
 }, "Please specify a valid UK postcode" );
 
 /*
- * Lets you say "at least X inputs that match selector Y must be filled."
+ * Let's you say "at least X inputs that match selector Y must be filled."
  *
  * The end result is that neither of these inputs:
  *
@@ -976,7 +976,7 @@ $.validator.addMethod( "require_from_group", function( value, element, options )
 }, $.validator.format( "Please fill at least {0} of these fields." ) );
 
 /*
- * Lets you say "either at least X inputs that match selector Y must be filled,
+ * Let's you say "either at least X inputs that match selector Y must be filled,
  * OR they must all be skipped (left blank)."
  *
  * The end result, is that none of these inputs:
