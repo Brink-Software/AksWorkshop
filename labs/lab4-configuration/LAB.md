@@ -377,7 +377,7 @@ template:
       aadpodidbinding: id-lab4
   spec:
     containers:
-    - image: <acrname>.azurecr.io/configwebapp:v1
+    - image: <acrname>.azurecr.io/configwebapp:v2
       name: configwebapp
       env:
       - name: KeyVaultBaseUri
