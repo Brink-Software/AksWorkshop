@@ -12,7 +12,7 @@ The error is: `0/1 nodes are available: 1 node(s) didn't match Pod's node affini
 
 ### Solution
 
-Remove the node selector or set in to `windows`
+Remove the node selector or set it to `windows`
 
 ### Remarks
 
