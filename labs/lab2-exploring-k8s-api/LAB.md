@@ -313,7 +313,7 @@ namespace ExploreKubernetesApi
 }
 ```
 
-Examine and run the code to see the generated output.
+Examine and run the code using `dotnet run` in the terminal to see the generated output.
 
 ## 6: Watching kubernetes resources
 
