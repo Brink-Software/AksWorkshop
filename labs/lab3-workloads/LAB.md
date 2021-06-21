@@ -120,7 +120,7 @@ We could examine the pod by using the command below and navigating to [http://lo
 kubectl port-forward samplewebapp 8083:80
 ```
 
-But instead we will expose the pod using a kubernetes service object. We will be diving into services in greater detail in Lab 5.
+But instead let's make the Pod available over the internet. We can do this by exposing the pod using a kubernetes service object. We will be diving into services in greater detail in Lab 5.
 
 Let's run the commands below to expose the pod using a public IP address.
 
