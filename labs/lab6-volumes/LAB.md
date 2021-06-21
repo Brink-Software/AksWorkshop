@@ -44,7 +44,7 @@ kubectl delete po/neo4j
 kubectl run neo4j --image neo4j 
 ```
 
-If you now refresh the browser you will be confronted with the login screen. Normally our application are stateless and this doesn't matter but there might be a situation where you want to be able to persist the data over Pod restarts and crashes. Kubernetes has various resources to help with this.
+If you now refresh the browser you will be confronted with the login screen. Normally our applications are stateless and this doesn't matter but there might be a situation where you want to be able to persist data over Pod restarts and crashes. Kubernetes has various resources to help with this.
 
 Azure Kubernetes Services comes preconfigured with a set of `StorageClasses`.
 
