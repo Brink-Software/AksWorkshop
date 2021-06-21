@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: "2021-06-19T15:45:04Z"
+  labels:
+    run: blue
+  name: blue
+  namespace: lab5
+  resourceVersion: "2707307"
+  uid: 96a51632-7a78-42ed-bd63-b13fe598cb7c
+spec:
+  containers:
+  - env:
+    - name: APP_COLOR
+      value: Blue
+    - name: APP_MESSAGE
+      value: "&#9785; &#x2639; Why so blue?"
+    image: arcbc5524.azurecr.io/nginxsample:v1
+    imagePullPolicy: IfNotPresent
+    name: blue
+    resources: {}
+    terminationMessagePath: /dev/termination-log
+    terminationMessagePolicy: File
+    volumeMounts:
+    - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+      name: default-token-dnz5t
+      readOnly: true
+  dnsPolicy: ClusterFirst
+  enableServiceLinks: true
+  nodeName: aks-lin-26726762-vmss000000
+  preemptionPolicy: PreemptLowerPriority
+  priority: 0
+  restartPolicy: Always
+  schedulerName: default-scheduler
+  securityContext: {}
+  serviceAccount: default
+  serviceAccountName: default
+  terminationGracePeriodSeconds: 30
+  tolerations:
+  - effect: NoExecute
+    key: node.kubernetes.io/not-ready
+    operator: Exists
+    tolerationSeconds: 300
+  - effect: NoExecute
+    key: node.kubernetes.io/unreachable
+    operator: Exists
+    tolerationSeconds: 300
+  volumes:
+  - name: default-token-dnz5t
+    secret:
+      defaultMode: 420
+      secretName: default-token-dnz5t
+status:
+  conditions:
+  - lastProbeTime: null
+    lastTransitionTime: "2021-06-19T15:45:04Z"
+    status: "True"
+    type: Initialized
+  - lastProbeTime: null
+    lastTransitionTime: "2021-06-19T15:45:05Z"
+    status: "True"
+    type: Ready
+  - lastProbeTime: null
+    lastTransitionTime: "2021-06-19T15:45:05Z"
+    status: "True"
+    type: ContainersReady
+  - lastProbeTime: null
+    lastTransitionTime: "2021-06-19T15:45:04Z"
+    status: "True"
+    type: PodScheduled
+  containerStatuses:
+  - containerID: containerd://6a648fd9c50fcdf6ad8032a4fbc662b7e01437cc3c5ff641fad3b581350cb65c
+    image: arcbc5524.azurecr.io/nginxsample:v1
+    imageID: arcbc5524.azurecr.io/nginxsample@sha256:54ef0f833dfbd21aa0a6f6956629d547030e107e44ec1e98c047e2d37c40b2ca
+    lastState: {}
+    name: blue
+    ready: true
+    restartCount: 0
+    started: true
+    state:
+      running:
+        startedAt: "2021-06-19T15:45:05Z"
+  hostIP: 10.240.0.4
+  phase: Running
+  podIP: 10.240.0.23
+  podIPs:
+  - ip: 10.240.0.23
+  qosClass: BestEffort
+  startTime: "2021-06-19T15:45:04Z"

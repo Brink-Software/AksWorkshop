@@ -2,8 +2,8 @@
 
 #### In this lab we will explore the kubernetes api using the proxy, kubectl, VS Code, the azure portal and C#
 
-## 1. Explore the apiserver using the proxy
-Run the following command to start the proxy. The proxy will handle exposing of and authentication to the kubernetes apiserver.
+## 1. Explore the api server using the proxy
+Run the following command to start the proxy. The proxy will handle exposing of and authentication to the kubernetes api server. The api server is hosted on Kubernetes and in order to interact with `kubectl proxy` will create a connection so the api server can be access usinged `localhost`.
 
 ```powershell
 kubectl proxy --port 8080
@@ -77,7 +77,7 @@ Finally let's delete the namespace by running the following command:
 Invoke-RestMethod -Uri $api/api/v1/namespaces/dev -Method DELETE | ConvertTo-Json
 ```
 
-## 2. Explore the apiserver using kubeclt cli
+## 2. Explore the apiserver using kubectl cli
 
 We can also use the kubernetes command-line tool `kubectl` to query the kubernetes api.
 
