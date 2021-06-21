@@ -384,6 +384,8 @@ template:
         value: https://<kv-lab4-your-name>.vault.azure.net/
 ```
 
+Don't forget to replace `<acrname>` with the actual name of your azure container registry!
+
 Cool, we can reapply the resources folder and watch the magic happen.
 
 ```powershell
