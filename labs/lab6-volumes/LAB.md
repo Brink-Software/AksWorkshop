@@ -51,7 +51,7 @@ Azure Kubernetes Services comes preconfigured with a set of `StorageClasses`.
 ```powershell
 kubectl get storageclasses  
 kubectl describe storageclasses default
-kubectl describe storageclasses default
+kubectl describe storageclasses managed-premium
 ```
 
 If you inspect the output from the commands above you will see that the default StorageClass uses  `storageaccounttype=StandardSSD_LRS` whereas the managed-premium uses `storageaccounttype=Premium_LRS`. You can find our more about these Storage classes [here](https://docs.microsoft.com/en-us/azure/aks/concepts-storage#storage-classes).
