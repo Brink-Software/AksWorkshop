@@ -1,8 +1,8 @@
-# Lab 7 Deploying you applications with helm and Azure DevOps
+# Lab 7. Deploying you applications with Helm and Azure DevOps
 
 ## 1. Helm
 
-Helm is the package manager for Kubernetes, it enables us to configure and deploy various Kubernetes resources using Helm Charts. Below are a few examples of chart that you can use to install applications into Kubernetes.
+Helm is the package manager for Kubernetes, it enables us to configure and deploy various Kubernetes resources using Helm Charts. Below are a few examples of charts that you can use to install applications into Kubernetes.
 
 - [Keda](https://github.com/kedacore/charts)
 - [Contour](https://github.com/bitnami/charts/tree/master/bitnami/contour/)
@@ -18,7 +18,7 @@ helm repo add bitnami https://charts.bitnami.com/bitnami
 helm install wordpress --create-namespace --dry-run  -n wordpress bitnami/wordpress
 ```
 
-This should print out all the resources this chart will create, followed by the instruction on how to access the wordpress installation one the deployment is done.
+This should print out all the resources this chart will create, followed by the instruction on how to access the wordpress installation once the deployment is done.
 
 Let's deploy the Chart.
 
@@ -35,7 +35,7 @@ kubectl delete ns wordpress
 
 We can also use Helm charts to define our own applications so can we dynamically apply configuration and deploy our applications.
 
-Go through the following sections of the Chart Template Guide over at the helm [docs](https://helm.sh/docs/chart_template_guide/getting_started/)
+Go through the following sections of the Chart Template Guide at the Helm [docs](https://helm.sh/docs/chart_template_guide/getting_started/):
 
 - [Getting Started](https://helm.sh/docs/chart_template_guide/getting_started/)
 - [Built-in Objects](https://helm.sh/docs/chart_template_guide/builtin_objects/)
