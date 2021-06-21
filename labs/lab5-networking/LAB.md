@@ -359,7 +359,7 @@ appgw.ingress.kubernetes.io/ssl-redirect: "true"
 appgw.ingress.kubernetes.io/appgw-ssl-certificate: <your-ssl-certificate-name>
 ```
 
-If you then re-apply the file you should then only be able to access your site over ssl.
+If you then reapply the file you should then only be able to access your site over ssl.
 
 Follow the steps above to also expose you `blue` and `red` Pods.
 
