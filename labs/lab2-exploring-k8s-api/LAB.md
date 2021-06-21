@@ -409,21 +409,6 @@ var config = KubernetesClientConfiguration.BuildConfigFromConfigFile();
 
 <!-- markdownlint-disable MD033 -->
 <details>
-  <summary style="font-size:24px; font-weight:bold;">&#10067;Quiz</summary></h3>
-
-<ul>
-
-```powershell
-kubectl get namespaces -o json
-```
-
-</ul>
-</details>
-
-<!-- markdownlint-enable MD033 -->
-
-<!-- markdownlint-disable MD033 -->
-<details>
   <summary style="font-size:24px; font-weight:bold;">&#127873; Bonus</summary>
 
 <ul>
