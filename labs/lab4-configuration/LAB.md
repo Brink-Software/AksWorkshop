@@ -16,6 +16,8 @@ kubectl config set-context --current --namespace=lab4
 Then let's create an application to display the current configuration.
 
 ```powershell
+mkdir lab4
+cd lab4
 dotnet new razor -o Lab4
 ```
 
