@@ -250,7 +250,7 @@ envFrom:
 kubectl apply -f resources/
 ```
 
-If you refresh the app you should now see your newly configured variables.
+If you refresh the app you should now see your the newly configured variables `SqlConnectionString` and `StorageConnectionString`.
 
 ## 3. Beter secrets using managed pod identity to access key vault
 
