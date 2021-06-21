@@ -7,7 +7,7 @@ kubectl create ns lab6
 kubectl config set-context --current --namespace=lab6
 ```
 
-Pods are ephemaral and so any data that is stored in the Pod gets lost once the Pod is deleted, or crashes. Let's demonstrate this.
+Pods are ephemeral and so any data that is stored in the Pod gets lost once the Pod is deleted, or crashes. Let's demonstrate this.
 
 First create a Pod based on the `neo4j` image and expose it.
 
