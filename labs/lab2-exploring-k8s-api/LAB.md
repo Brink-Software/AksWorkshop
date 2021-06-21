@@ -98,7 +98,7 @@ kubectl get namespaces
 <details>
   <summary>&#x261d; &#xfe0f; Hint </summary>
 <ul>
-<h3>kubeclt Output:</h3>  
+<h3>kubectl Output:</h3>  
   <p>The output will be in human readable plain-text format but you can change the format to json by running the following command:</p>
 
 ```powershell
