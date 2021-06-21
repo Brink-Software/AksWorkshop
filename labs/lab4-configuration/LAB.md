@@ -294,6 +294,11 @@ Configure our application to populate the configuration from key vault, and add 
 <!-- markdownlint-enable MD033 -->
 
 ```C#
+using Azure.Extensions.AspNetCore.Configuration.Secrets;
+using Azure.Identity;
+
+...
+
 public static IHostBuilder CreateHostBuilder(string[] args) =>
     Host.CreateDefaultBuilder(args)
         .ConfigureAppConfiguration((context, config) =>
