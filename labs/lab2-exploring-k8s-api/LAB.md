@@ -77,7 +77,7 @@ Finally let's delete the namespace by running the following command:
 Invoke-RestMethod -Uri $api/api/v1/namespaces/dev -Method DELETE | ConvertTo-Json
 ```
 
-## 2. Explore the apiserver using kubeclt cli
+## 2. Explore the apiserver using kubectl cli
 
 We can also use the kubernetes command-line tool `kubectl` to query the kubernetes api.
 
