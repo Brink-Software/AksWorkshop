@@ -522,7 +522,7 @@ kubectl describe node $NODE_NAME | Select-String Taints
 Next let's try and run a pod.
 
 ```powershell
-kubectl run nginx
+kubectl run nginx --image=nginx
 ```
 
 If we examine the Pod we will see that the Pod is not running because `0/1 nodes are available`.
