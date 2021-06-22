@@ -280,8 +280,16 @@ kubectl get service rainbow -w
 Once you have an IP address you can run the following commands several times to see the responses changing from Blue to Green to Red.
 
 ```powershell
+curl -Uri <rainbow-ip> | Select-String background-color:
+```
+
+or
+
+```powershell
 curl -s http://<rainbow-ip> | Select-String background-color:
 ```
+
+depending on your environment.
 
 You can read more about Services [here](https://kubernetes.io/docs/concepts/services-networking/service/)
 
