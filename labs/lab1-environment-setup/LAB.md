@@ -4,9 +4,11 @@
 
 1. Follow the [Akskickstarter](https://github.com/Ibis-Software/AksKickStarters) instructions to setup your environment.
 2. Install [Docker](https://www.docker.com/get-started).
-3. Install [VS Code Kubernetes tools](https://marketplace.visualstudio.com/items?itemName=ms-kubernetes-tools.vscode-kubernetes-tools).
-4. Setup access credentials for the newly created cluster in step 1 using `az aks get-credentials -n <clusterName> -g <clusterResourcegroupName>`.
-6. Clone this repository.
+3. Install [.NET 5.0](https://aka.ms/dotnet-download).
+4. Install [VS Code](https://code.visualstudio.com/download).
+5. Install [VS Code Kubernetes tools](https://marketplace.visualstudio.com/items?itemName=ms-kubernetes-tools.vscode-kubernetes-tools).
+6. Setup access credentials for the newly created cluster in step 1 using `az aks get-credentials -n <clusterName> -g <clusterResourcegroupName>`.
+7. Clone this repository.
 
 
 
