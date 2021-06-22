@@ -297,7 +297,7 @@ kubectl get po --selector app=default-http-backend -n default
 Let's change the default backend image to our new created image.
 
 ```powershell
-env:KUBE_EDITOR='code --wait'
+$env:KUBE_EDITOR='code --wait'
 kubectl edit deployment default-http-backend -n default
 ```
 
