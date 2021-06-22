@@ -111,7 +111,7 @@ COPY entrypoint.sh /docker-entrypoint.d
 RUN chmod +x /docker-entrypoint.d/entrypoint.sh
 ```
 
-We can now build and test our application by running the following commands.
+We can now build and test our application by running the following commands. Make sure to stop the previous command before running the next one.
 
 ```powershell
 az acr build -t nginxsample:v1 -r $ACR_NAME . 
