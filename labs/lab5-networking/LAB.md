@@ -453,8 +453,8 @@ Next run the following commands to inspect the Application Gateway configuration
 
 ```powershell
 az network application-gateway http-listener list -g $GROUP_NAME --gateway-name $GATEWAY_NAME  --query "[].{name:name,host:hostNames[0] }" -otable
-az network application-gateway rules list -g $GROUP_NAME --gateway-name $GATEWAY_NAME -ojsonc
-z network application-gateway url-path-map list -g $GROUP_NAME --gateway-name $GATEWAY_NAME --query "[0]" -ojson | Select-String "pool-lab5-orange-80-bp-80" -Context 2,19
+az network application-gateway rule list -g $GROUP_NAME --gateway-name $GATEWAY_NAME -ojsonc
+az network application-gateway url-path-map list -g $GROUP_NAME --gateway-name $GATEWAY_NAME --query "[0]" -ojson | Select-String "pool-lab5-orange-80-bp-80" -Context 2,19
 az network application-gateway address-pool show -n pool-lab5-orange-80-bp-80 -g $GROUP_NAME --gateway-name $GATEWAY_NAME --query "backendAddresses[].ipAddress"  -ojsonc
 kubectl describe svc orange | Select-String Endpoints:
 ```

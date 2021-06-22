@@ -107,6 +107,16 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Lab4.dll"]
 ```
+<!-- markdownlint-disable MD033 -->
+<p>
+<details>
+  <summary>&#x2757; Note </summary>
+<ul>  
+  <p> Please note that the Dockerfile content and IndexModel namespace are case-sensitive. If you have named the project `lab4`, the next steps will fail. Rename all references or repeat step 1 using `Lab4`. </p>
+</ul>
+</details>
+</p>
+<!-- markdownlint-enable MD033 -->
 
 Cool now let's build, run and inspect the application.
 
@@ -150,11 +160,7 @@ spec:
 <details>
   <summary>&#x261d; &#xfe0f; Hint: update the image name </summary>
 <ul>  
-  <p>In the deployment file, replace `<acrname>` with the actual azure container repository name!</p>
-
-```powershell
-  Invoke-RestMethod -Uri $api/api | ConvertTo-Json | jq -C
-```
+  <p>In the deployment file, replace `&#x3C;acrname&#x3E;` with the actual azure container repository name!</p>
 </ul>
 </details>
 </p>
