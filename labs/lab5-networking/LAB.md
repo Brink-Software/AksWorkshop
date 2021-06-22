@@ -237,7 +237,7 @@ nslookup orange
 wget -qO- orange
 ```
 
-Cool, so from within the cluster if we use a Service we can use the service name to communicate with the backend applications.
+Cool, so from within the cluster if we use a Service we can use the service name to communicate with the backend applications. You can exit busybox by running the command `exit`.
 
 Earlier in this workshop we already created services to expose our workloads. We did this by creating a Service of type LoadBalancer.  
 
