@@ -27,8 +27,10 @@ Ways to troubleshoot your application:
 
 [Troubleshoot Applications](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application/#debugging-pods)
 
-There is also this short video guiding you trough some options.
+There is also this short video guiding you through some options.
 [![How To Debug A Kubernetes Application](https://res.cloudinary.com/marcomontalbano/image/upload/v1623867284/video_to_markdown/images/youtube--aCcIdG82KxA-c05b58ac6eb4c4700831b2b3070cd403.jpg)](https://www.youtube.com/watch?v=aCcIdG82KxA "How To Debug A Kubernetes Application")
+
+Finally, you can also refer to this [Kubectl Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/) to look up commands that can help you in troubleshooting.
 
 <!-- markdownlint-disable MD033 -->
 <details>

@@ -108,6 +108,7 @@ FROM nginx:stable-alpine
 COPY default.conf /etc/nginx/conf.d/
 COPY index.html /usr/share/nginx/html
 COPY entrypoint.sh /docker-entrypoint.d
+RUN dos2unix /docker-entrypoint.d/entrypoint.sh
 RUN chmod +x /docker-entrypoint.d/entrypoint.sh
 ```
 
