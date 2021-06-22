@@ -36,20 +36,15 @@ There is also this short video guiding you through some options.
 
 Finally, you can also refer to this [Kubectl Cheat Sheet](https://kubernetes.io/docs/reference/kubectl/cheatsheet/) to look up commands that can help you in troubleshooting.
 
-<!-- markdownlint-disable MD033 -->
-<details>
-  <summary>&#127873; Bonus 1</summary>
+## Questions
 
 - How many problems did you solve?
 - What are the symptoms of the problems?
 - How did you solve them?
 
-</details>
-<!-- markdownlint-enable MD033 -->
-
 <!-- markdownlint-disable MD033 -->
 <details>
-  <summary>&#127873; Bonus 2</summary>
+  <summary>&#127873; Bonus</summary>
 
 In the ingress definition, change line 16 to 
 
@@ -63,5 +58,9 @@ Then deploy the chart and observe that the deployment is not working.
 
 </details>
 <!-- markdownlint-enable MD033 -->
+
+## Solutions
+
+A detailed solution can be found [here](./solution/SOLUTION.md). But we urge you to try to solve the problem yourself first! 
 
 [:arrow_backward: previous](../lab7-deploy/LAB.md)  [next :arrow_forward:](../lab9-quiz/LAB.md)
