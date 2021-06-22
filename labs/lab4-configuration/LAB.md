@@ -150,11 +150,7 @@ spec:
 <details>
   <summary>&#x261d; &#xfe0f; Hint: update the image name </summary>
 <ul>  
-  <p>In the deployment file, replace `<acrname>` with the actual azure container repository name!</p>
-
-```powershell
-  Invoke-RestMethod -Uri $api/api | ConvertTo-Json | jq -C
-```
+  <p>In the deployment file, replace `&#x3C;acrname&#x3E;` with the actual azure container repository name!</p>
 </ul>
 </details>
 </p>
