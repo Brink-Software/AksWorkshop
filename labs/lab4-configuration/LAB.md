@@ -107,6 +107,16 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Lab4.dll"]
 ```
+<!-- markdownlint-disable MD033 -->
+<p>
+<details>
+  <summary>&#x2757; Note </summary>
+<ul>  
+  <p> Please note that the Dockerfile content and IndexModel namespace are case-sensitive. If you have named the project `lab4`, the next steps will fail. Rename all references or repeat step 1 using `Lab4`. </p>
+</ul>
+</details>
+</p>
+<!-- markdownlint-enable MD033 -->
 
 Cool now let's build, run and inspect the application.
 
