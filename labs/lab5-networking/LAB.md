@@ -248,7 +248,7 @@ kubectl label po red app=rainbow
 kubectl label po green app=rainbow 
 ```
 
-Now let's create the rainbow Service,
+Now let's create the rainbow Service, by using the selector `app: rainbow` the Service will target all Pods with that label.
 
 service.yaml
 
