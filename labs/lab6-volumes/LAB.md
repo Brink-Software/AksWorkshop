@@ -101,7 +101,7 @@ kubectl delete po/neo4j
 kubectl apply -f pvc.yaml -f pod.yaml
 ```
 
-If you now retry the steps above, and delete and reapply the `pod.yaml` file you initial data will still be availble. We can also inspect the `PersistentVolume` that was created as a result of our actions, and be able to locate the Azure Disk resource where our data is stored.
+If you now retry the steps above, and delete and reapply the `pod.yaml` file you initial data will still be available. We can also inspect the `PersistentVolume` that was created as a result of our actions, and be able to locate the Azure Disk resource where our data is stored.
 
 ```powershell
 kubectl describe pv
