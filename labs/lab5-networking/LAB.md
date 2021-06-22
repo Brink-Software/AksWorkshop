@@ -178,7 +178,7 @@ spec:
         app: orange
     spec:
       containers:
-      - image: arcbc5524.azurecr.io/nginxsample:v1
+      - image: <your-acr-name>.azurecr.io/nginxsample:v1
         name: nginxsample
         env:
         - name: APP_COLOR
@@ -196,6 +196,10 @@ spec:
   ports:
     - protocol: TCP
       port: 80
+```
+
+```powershell
+kubectl apply -f ./deployment.yaml
 ```
 
 Let's first explore the Pods we have running and their IP addresses.
@@ -275,7 +279,7 @@ kubectl get service rainbow -w
 Once you have an IP address you can run the following commands several times to see the responses changing from Blue to Green to Red.
 
 ```powershell
-curl -s <rainbow-ip> | Select-String background-color:
+curl -s http://<rainbow-ip> | Select-String background-color:
 ```
 
 You can read more about Services [here](https://kubernetes.io/docs/concepts/services-networking/service/)
