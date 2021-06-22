@@ -64,4 +64,4 @@ Then deploy the chart and observe that the deployment is not working.
 </details>
 <!-- markdownlint-enable MD033 -->
 
-[:arrow_backward: previous](../lab7-deploy/LAB.md)
+[:arrow_backward: previous](../lab7-deploy/LAB.md)  [next :arrow_forward:](../lab9-quiz/LAB.md)

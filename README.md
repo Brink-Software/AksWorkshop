@@ -12,3 +12,4 @@ This workshop consist of several presentations and the following Labs:
 6. [Storing and preserving application data with volumes](labs/lab6-volumes/LAB.md)
 8. [Deploying you applications with helm and Azure DevOps](labs/lab7-deploy/LAB.md)
 7. [Troubleshooting](labs/lab8-troubleshooting/LAB.md)
+8. [Quiz](labs/lab9-quiz/LAB.md)
