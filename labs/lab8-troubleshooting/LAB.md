@@ -2,6 +2,10 @@
 
 Examine the Helm chart located in the folder [exercises/lab8](../../exercises/lab8). Deploy the chart to the cluster using any method you like and watch it fail. 
 
+In this lab we will expose a website that can be reached using the url http://failure.com. In order for the browser to resolve this url we need to map the public IP of the gateway to this url. We will do this by editing the file `c:\windows\system32\drivers\etc\hosts`
+
+Add the line `<your-public-ip> failure.com` to the file and save it. Make sure your editor runs with administrator permissions to be able to save the file.
+
 If you have troubles deploying the chart take a look at the hint below.
 
 <!-- markdownlint-disable MD033 -->
