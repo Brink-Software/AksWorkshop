@@ -203,7 +203,7 @@ Let's first explore the Pods we have running and their IP addresses.
 kubectl describe po | Select-String ^Name:,^Status:,^IP: 
 ```
 
-Cool now let's have a look at our orange service.
+Cool now let's have a look at our orange service (don't forget to apply the resource first).
 
 ```powershell
 kubectl describe service orange 
