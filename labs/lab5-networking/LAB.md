@@ -108,9 +108,10 @@ FROM nginx:stable-alpine
 COPY default.conf /etc/nginx/conf.d/
 COPY index.html /usr/share/nginx/html
 COPY entrypoint.sh /docker-entrypoint.d
+RUN chmod +x /docker-entrypoint.d/entrypoint.sh
 ```
 
-We can now build and test our application by running the following commands.
+We can now build and test our application by running the following commands. Make sure to stop the previous command before running the next one.
 
 ```powershell
 az acr build -t nginxsample:v1 -r $ACR_NAME . 
@@ -177,7 +178,7 @@ spec:
         app: orange
     spec:
       containers:
-      - image: arcbc5524.azurecr.io/nginxsample:v1
+      - image: <your-acr-name>.azurecr.io/nginxsample:v1
         name: nginxsample
         env:
         - name: APP_COLOR
@@ -195,6 +196,10 @@ spec:
   ports:
     - protocol: TCP
       port: 80
+```
+
+```powershell
+kubectl apply -f ./deployment.yaml
 ```
 
 Let's first explore the Pods we have running and their IP addresses.
@@ -248,7 +253,7 @@ kubectl label po red app=rainbow
 kubectl label po green app=rainbow 
 ```
 
-Now let's create the rainbow Service,
+Now let's create the rainbow Service, by using the selector `app: rainbow` the Service will target all Pods with that label.
 
 service.yaml
 
@@ -274,7 +279,7 @@ kubectl get service rainbow -w
 Once you have an IP address you can run the following commands several times to see the responses changing from Blue to Green to Red.
 
 ```powershell
-curl -s <rainbow-ip> | Select-String background-color:
+curl -s http://<rainbow-ip> | Select-String background-color:
 ```
 
 You can read more about Services [here](https://kubernetes.io/docs/concepts/services-networking/service/)
